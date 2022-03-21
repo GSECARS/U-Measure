@@ -1,0 +1,74 @@
+#lbl-experiment {
+    color: #d7dde0;
+    font-size: 13px;
+}
+
+#lbl-experiment:disabled {
+    color: #969fa3;
+}
+
+#txt-experiment, #spin-load, #spin-temperature {
+    background-color: #d7dde0;
+    color: #494a4d;
+    border: 2px solid #d7dde0;
+    border-radius: 4px;
+    font-size: 12px;
+    padding: 1px 5px;
+}
+
+#txt-experiment:focus, #spin-load:focus, #spin-temperature:focus {
+    border: 2px solid #60b3a1;
+}
+
+#check-repeated {
+    color: #d7dde0;
+    font-size: 13px;
+}
+
+#check-repeated::indicator {
+    background-color: #d7dde0;
+    margin: 0;
+    border: 2px solid #d7dde0;
+    width: 14px;
+    height: 14px;
+}
+
+#check-repeated::indicator:hover {
+    border-color: #60b3a1;
+}
+
+#check-repeated::indicator:pressed {
+    border: none;
+}
+
+#check-repeated::indicator:checked:hover {
+    border-color: #d7dde0;
+}
+
+#check-repeated::indicator:checked {
+    background-color: #60b3a1;
+}
+
+#group-experiment {
+    background-color: #494a4d;
+    border: none;
+    border-radius: 5px;
+    padding: 10px;
+}
+
+#txt-experiment:disabled, #spin-load:disabled, #spin-temperature:disabled {
+    background-color: #cfd0d1;
+    border: 2px solid #cfd0d1;
+}
+
+#check-repeated:disabled {
+    color: #969fa3;
+}
+
+#check-repeated::indicator:disabled {
+    background-color: #cfd0d1;
+}
+
+#check-repeated::indicator:checked:disabled {
+    background-color: #a2a4a6;
+}
