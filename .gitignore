@@ -127,3 +127,10 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+# IDE Specific
+.idea/
+__pycache__/
+
+# Hidden files and folders
+.*
