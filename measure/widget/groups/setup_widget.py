@@ -29,7 +29,7 @@ class SetupWidget(QGroupBox):
         self._lbl_cycle = QLabel("Cycle")
         self._lbl_run_number = QLabel("#Run")
         self._lbl_vpp = QLabel("Vpp")
-        self.lbl_path = QLabel("test")
+        self.lbl_path = QLabel()
         self.txt_mso = QLineEdit()
         self.txt_afg = QLineEdit()
         self.txt_cycle = QLineEdit()
