@@ -26,11 +26,13 @@ class SetupWidget(QGroupBox):
         # Initialize setup group's widgets
         self._lbl_mso = QLabel("MSO")
         self._lbl_afg = QLabel("AFG")
+        self._lbl_cycle = QLabel("Cycle")
         self._lbl_run_number = QLabel("#Run")
         self._lbl_vpp = QLabel("Vpp")
         self.lbl_path = QLabel("test")
         self.txt_mso = QLineEdit()
         self.txt_afg = QLineEdit()
+        self.txt_cycle = QLineEdit()
         self.txt_run_number = QLineEdit()
         self.spin_vpp = QDoubleSpinBox()
         self.btn_reset = QPushButton("Reset")
@@ -39,10 +41,12 @@ class SetupWidget(QGroupBox):
         self._setup_widgets = [
             self._lbl_mso,
             self._lbl_afg,
+            self._lbl_cycle,
             self._lbl_run_number,
             self._lbl_vpp,
             self.txt_mso,
             self.txt_afg,
+            self.txt_cycle,
             self.txt_run_number,
             self.spin_vpp,
             self.btn_reset,
@@ -77,6 +81,7 @@ class SetupWidget(QGroupBox):
         labels = [
             self._lbl_mso,
             self._lbl_afg,
+            self._lbl_cycle,
             self._lbl_run_number,
             self._lbl_vpp,
             self.lbl_path,
@@ -86,7 +91,7 @@ class SetupWidget(QGroupBox):
 
     def _configure_setup_text_boxes(self) -> None:
         """Configuration of the setup group's text boxes."""
-        txt_boxes = [self.txt_mso, self.txt_afg, self.txt_run_number]
+        txt_boxes = [self.txt_mso, self.txt_afg, self.txt_cycle, self.txt_run_number]
         [txt_box.setObjectName("txt-setup") for txt_box in txt_boxes]
 
     def _configure_setup_spin_boxes(self) -> None:
@@ -127,9 +132,11 @@ class SetupWidget(QGroupBox):
         afg_layout.addWidget(self.txt_afg)
         setup_layout.addLayout(afg_layout, 1, 0, 1, 6)
 
-        # layout for #run and vpp widgets
+        # layout for cycle, #run and vpp widgets
         run_vpp_layout = QHBoxLayout()
         run_vpp_layout.setContentsMargins(0, 0, 0, 0)
+        run_vpp_layout.addWidget(self._lbl_cycle)
+        run_vpp_layout.addWidget(self.txt_cycle)
         run_vpp_layout.addWidget(self._lbl_run_number)
         run_vpp_layout.addWidget(self.txt_run_number)
         run_vpp_layout.addWidget(self._lbl_vpp)

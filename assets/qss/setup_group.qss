@@ -11,10 +11,6 @@
     color: #60b3a1;
 }
 
-#lbl-path:disabled {
-    color: #b36060;
-}
-
 #txt-setup, #spin-vpp {
     background-color: #d7dde0;
     color: #494a4d;
