@@ -24,8 +24,8 @@ class ExperimentWidget(QGroupBox):
 
         # Initialize experiment group's widgets
         self._lbl_frequencies = QLabel("Frequencies")
-        self._lbl_load = QLabel("Load")
-        self._lbl_temperature = QLabel("Temperature")
+        self._lbl_load = QLabel("Load (tons)")
+        self._lbl_temperature = QLabel("Temperature (K)")
         self.txt_frequencies = QLineEdit()
         self.spin_load = QDoubleSpinBox()
         self.spin_temperature = QDoubleSpinBox()
