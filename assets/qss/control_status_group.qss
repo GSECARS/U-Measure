@@ -1,0 +1,70 @@
+#lbl-control-status {
+    color: #d7dde0;
+    font-size: 13px;
+}
+
+#lbl-time {
+    color: #60b3a1;
+    font-size: 15px;
+}
+
+#lbl-status, #lbl-time {
+    color: #60b3a1;
+    font-size: 18px;
+}
+
+#lbl-status:disabled {
+    color: #b36060;
+}
+
+#txt-feedback {
+    background-color: #686a6e;
+    color: #b8bdbf;
+    border: none;
+    border-radius: 4px;
+    font-size: 12px;
+    padding: 1px 5px;
+}
+
+#txt-feedback:focus {
+    border: none;
+}
+
+QLine {
+    color: #d7dde0;
+}
+
+#btn-collection {
+    background: #60b3a1;
+    border:2px solid #60b3a1;
+    color: #494a4d;
+    font-size: 16px;
+    border-radius: 4px;
+    padding: 10px 30px;
+}
+
+#btn-collection:pressed{
+    margin: 1px;
+}
+
+#btn-collection:hover {
+    border:2px solid #60b3a1;
+    background-color: #494a4d;
+    color: #60b3a1;
+}
+
+#btn-collection:focus {
+	outline: none;
+}
+
+#group-control-status {
+    background-color: #494a4d;
+    border: none;
+    border-radius: 5px;
+    padding: 10px;
+}
+
+#txt-setup:disabled, #spin-vpp:disabled, #btn-reset:disabled {
+    background-color: #cfd0d1;
+    border: 2px solid #cfd0d1;
+}
