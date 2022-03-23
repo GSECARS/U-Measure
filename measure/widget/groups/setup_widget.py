@@ -98,7 +98,7 @@ class SetupWidget(QGroupBox):
         [txt_box.setObjectName("txt-setup") for txt_box in txt_boxes]
 
         # IP validator
-        expression = QRegularExpression("^(?:[0-9]{1,3}\.){2}[0-9]{1,3}$")
+        expression = QRegularExpression("^(?:[0-9]{1,3}\.){3}[0-9]{1,3}$")
         validator = QRegularExpressionValidator(expression, self)
         self.txt_mso.setValidator(validator)
         self.txt_afg.setValidator(validator)
