@@ -103,6 +103,12 @@ class SetupWidget(QGroupBox):
         self.txt_mso.setValidator(validator)
         self.txt_afg.setValidator(validator)
 
+        # Alignment
+        self.txt_mso.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)
+        self.txt_afg.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)
+        self.txt_cycle.setAlignment(Qt.AlignHCenter | Qt.AlignVCenter)
+        self.txt_run_number.setAlignment(Qt.AlignHCenter | Qt.AlignVCenter)
+
     def _configure_setup_spin_boxes(self) -> None:
         """Configuration of the setup group's spin boxes."""
         self.spin_vpp.setObjectName("spin-vpp")
