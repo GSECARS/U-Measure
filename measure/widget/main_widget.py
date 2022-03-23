@@ -1,16 +1,17 @@
 import os
 from typing import Optional
 from qtpy.QtWidgets import QWidget, QMessageBox, QHBoxLayout
-from qtpy.QtGui import QCloseEvent
+from qtpy.QtGui import QCloseEvent, QIcon
 from qtpy.QtCore import QSettings, QSize, QPoint
 
 from measure.widget.groups import MainGroupWidget
-from measure.util import qss_path
+from measure.util import qss_path, icon_path
 
 
 class MainWidget(QWidget):
     """This is used as the main application window."""
 
+    _icon: str = os.path.join(icon_path, "ultrasonic_icon.ico")
     _qss: str = os.path.join(qss_path, "main_widget.qss")
     _title: str = "U-Measure"
 
@@ -31,6 +32,9 @@ class MainWidget(QWidget):
 
         # Sets the application title
         self.setWindowTitle(self._title)
+
+        # Sets the application icon
+        self.setWindowIcon(QIcon(self._icon))
 
         # Sets the stylesheet from /assets/qss/main_widget.qss
         self.setStyleSheet(open(self._qss, "r").read())
