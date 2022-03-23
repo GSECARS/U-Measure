@@ -3,6 +3,7 @@ from qtpy.QtWidgets import (
     QGroupBox,
     QGridLayout,
     QHBoxLayout,
+    QVBoxLayout,
     QSizePolicy,
     QLabel,
     QLineEdit,
@@ -10,7 +11,8 @@ from qtpy.QtWidgets import (
     QDoubleSpinBox,
     QAbstractSpinBox,
 )
-from qtpy.QtCore import Qt
+from qtpy.QtCore import Qt, QRegularExpression
+from qtpy.QtGui import QRegularExpressionValidator
 
 from measure.util import qss_path
 
@@ -58,6 +60,7 @@ class SetupWidget(QGroupBox):
         self._configure_setup_text_boxes()
         self._configure_setup_spin_boxes()
         self._configure_setup_buttons()
+        self._connect_setup_widgets()
         self._layout_setup_widgets()
 
     def disable(self) -> None:
@@ -94,6 +97,12 @@ class SetupWidget(QGroupBox):
         txt_boxes = [self.txt_mso, self.txt_afg, self.txt_cycle, self.txt_run_number]
         [txt_box.setObjectName("txt-setup") for txt_box in txt_boxes]
 
+        # IP validator
+        expression = QRegularExpression("^(?:[0-9]{1,3}\.){2}[0-9]{1,3}$")
+        validator = QRegularExpressionValidator(expression, self)
+        self.txt_mso.setValidator(validator)
+        self.txt_afg.setValidator(validator)
+
     def _configure_setup_spin_boxes(self) -> None:
         """Configuration of the setup group's spin boxes."""
         self.spin_vpp.setObjectName("spin-vpp")
@@ -109,6 +118,26 @@ class SetupWidget(QGroupBox):
         self.btn_reset.setObjectName("btn-reset")
         self.btn_reset.setFlat(True)
         self.btn_reset.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
+
+    def _connect_setup_widgets(self) -> None:
+        """Connects signals and slots for some setup widgets."""
+        self.txt_mso.returnPressed.connect(
+            lambda: self._txt_return_pressed(self.txt_mso)
+        )
+        self.txt_afg.returnPressed.connect(
+            lambda: self._txt_return_pressed(self.txt_afg)
+        )
+        self.txt_cycle.returnPressed.connect(
+            lambda: self._txt_return_pressed(self.txt_cycle)
+        )
+        self.txt_run_number.returnPressed.connect(
+            lambda: self._txt_return_pressed(self.txt_run_number)
+        )
+
+    @staticmethod
+    def _txt_return_pressed(txt_widget: QLineEdit) -> None:
+        """Clears focus for selected widgets."""
+        txt_widget.clearFocus()
 
     def _layout_setup_widgets(self) -> None:
         """Sets the layout for the setup group widgets."""

@@ -9,7 +9,8 @@ from qtpy.QtWidgets import (
     QDoubleSpinBox,
     QAbstractSpinBox,
 )
-from qtpy.QtCore import Qt
+from qtpy.QtCore import Qt, QRegularExpression
+from qtpy.QtGui import QRegularExpressionValidator
 
 from measure.util import qss_path
 
@@ -48,6 +49,7 @@ class ExperimentWidget(QGroupBox):
         self._configure_experiment_text_boxes()
         self._configure_experiment_spin_boxes()
         self._configure_experiment_check_boxes()
+        self._connect_experiment_widgets()
         self._layout_experiment_widgets()
 
     def disable(self) -> None:
@@ -79,6 +81,11 @@ class ExperimentWidget(QGroupBox):
         """Configuration of the experiment group's text boxes."""
         self.txt_frequencies.setObjectName("txt-experiment")
 
+        # Validator for frequencies.
+        expression = QRegularExpression("^(((?:0|[1-9][0-9]*)\.[0-9]+)*\, )*$")
+        validator = QRegularExpressionValidator(expression)
+        self.txt_frequencies.setValidator(validator)
+
     def _configure_experiment_spin_boxes(self) -> None:
         """Configuration of the experiment group's spin boxes."""
         self.spin_load.setObjectName("spin-load")
@@ -101,6 +108,14 @@ class ExperimentWidget(QGroupBox):
         """Configuration of the experiment group's check boxes."""
         self.check_repeated.setTristate(False)
         self.check_repeated.setObjectName("check-repeated")
+
+    def _connect_experiment_widgets(self) -> None:
+        """Connects signals and slots for some experiment widgets."""
+        self.txt_frequencies.returnPressed.connect(self._txt_frequencies_return_pressed)
+
+    def _txt_frequencies_return_pressed(self) -> None:
+        """Loses focus on return press."""
+        self.txt_frequencies.clearFocus()
 
     def _layout_experiment_widgets(self) -> None:
         """Sets the layout for the experiment group widgets."""
