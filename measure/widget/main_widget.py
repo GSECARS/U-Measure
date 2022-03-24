@@ -21,6 +21,9 @@ class MainWidget(QWidget):
         self._settings = settings
         self.group_widget = MainGroupWidget()
 
+        # Event helpers
+        self._terminated: bool = False
+
         # Run main application methods
         self._configure_main_widget()
         self._layout_main_widget()
@@ -71,6 +74,8 @@ class MainWidget(QWidget):
 
         if _msg_question == QMessageBox.Yes:
 
+            self._terminated = True
+
             # Save window size and position.
             self._settings.setValue("window_size", self.size())
             self._settings.setValue("window_position", self.pos())
@@ -78,3 +83,7 @@ class MainWidget(QWidget):
             event.accept()
         else:
             event.ignore()
+
+    @property
+    def terminated(self):
+        return self._terminated

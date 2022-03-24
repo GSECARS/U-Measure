@@ -25,6 +25,7 @@ class ControlStatusWidget(QGroupBox):
         # Initialize control group's widgets
         self._lbl_elapsed = QLabel("Elapsed time")
         self._lbl_feedback = QLabel("Feedback")
+        self.lbl_repetition_status = QLabel()
         self.lbl_time = QLabel("0:00:00")
         self.lbl_status = QLabel("Idle")
         self.btn_collection = QPushButton("Collect")
@@ -55,7 +56,10 @@ class ControlStatusWidget(QGroupBox):
         ]
         [label.setObjectName("lbl-control-status") for label in labels]
         self.lbl_time.setObjectName("lbl-time")
+        self.lbl_repetition_status.setObjectName("lbl-status")
         self.lbl_status.setObjectName("lbl-status")
+
+        self.lbl_repetition_status.setVisible(False)
 
     def _configure_control_status_buttons(self) -> None:
         """Configuration of the control group's buttons."""
@@ -95,6 +99,9 @@ class ControlStatusWidget(QGroupBox):
         collection_layout = QVBoxLayout()
         collection_layout.setContentsMargins(0, 0, 0, 0)
         collection_layout.addWidget(self.lbl_status, alignment=Qt.AlignCenter)
+        collection_layout.addWidget(
+            self.lbl_repetition_status, alignment=Qt.AlignCenter
+        )
         collection_layout.addWidget(self.btn_collection)
 
         # layout for the complete control part
