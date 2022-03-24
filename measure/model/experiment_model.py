@@ -12,7 +12,8 @@ class ExperimentModel:
         init=False, repr=False, compare=False, default_factory=lambda: []
     )
     _threshold: float = field(init=False, repr=False, compare=False, default=27.0)
-    _repeat: bool = field(init=False, repr=False, compare=False, default=False)
+    _repetitions: int = field(init=False, repr=False, compare=False, default=1)
+    _file_number: int = field(init=False, repr=False, compare=False, default=1)
     _scan: str = field(init=False, repr=False, compare=False, default="A")
     _load: float = field(init=False, repr=False, compare=False, default=0.0)
     _temperature: float = field(init=False, repr=False, compare=False, default=0.0)
@@ -29,11 +30,17 @@ class ExperimentModel:
             threshold_value = 0.0
         object.__setattr__(self, "_threshold", threshold_value)
 
-        # Set repeat value
-        repeat_value = self.settings.value("repeat", type=bool)
-        if repeat_value is None:
-            repeat_value = False
-        object.__setattr__(self, "_repeat", repeat_value)
+        # Set repetitions value
+        repetitions_value = self.settings.value("repetitions", type=int)
+        if repetitions_value is None:
+            repetitions_value = 1
+        object.__setattr__(self, "_repetitions", repetitions_value)
+
+        # Set file number value
+        file_number_value = self.settings.value("file_number", type=int)
+        if file_number_value is None:
+            file_number_value = 1
+        object.__setattr__(self, "_file_number", file_number_value)
 
         # Set load value
         load_value = self.settings.value("load", type=float)
@@ -51,7 +58,8 @@ class ExperimentModel:
         """Sets the default values for the experiment section."""
         object.__setattr__(self, "_frequencies", [20.0, 30.0, 40.0, 50.0, 60.0])
         object.__setattr__(self, "_threshold", 27)
-        object.__setattr__(self, "_repeat", False)
+        object.__setattr__(self, "_repetitions", 1)
+        object.__setattr__(self, "_file_number", 1)
         object.__setattr__(self, "_scan", "A")
         object.__setattr__(self, "_load", 1)
         object.__setattr__(self, "_temperature", 1)
@@ -74,8 +82,12 @@ class ExperimentModel:
         return self._threshold
 
     @property
-    def repeat(self) -> bool:
-        return self._repeat
+    def repetitions(self) -> int:
+        return self._repetitions
+
+    @property
+    def file_number(self) -> int:
+        return self._file_number
 
     @property
     def scan(self) -> str:
@@ -101,11 +113,17 @@ class ExperimentModel:
             object.__setattr__(self, "_threshold", value)
             self.settings.setValue("threshold", self._threshold)
 
-    @repeat.setter
-    def repeat(self, value) -> None:
-        if isinstance(value, bool):
-            object.__setattr__(self, "_repeat", value)
-            self.settings.setValue("repeat", self._repeat)
+    @repetitions.setter
+    def repetitions(self, value) -> None:
+        if isinstance(value, int):
+            object.__setattr__(self, "_repetitions", value)
+            self.settings.setValue("repetitions", self._repetitions)
+
+    @file_number.setter
+    def file_number(self, value) -> None:
+        if isinstance(value, int):
+            object.__setattr__(self, "_file_number", value)
+            self.settings.setValue("file_number", self._file_number)
 
     @scan.setter
     def scan(self, value) -> None:

@@ -21,7 +21,12 @@ class ExperimentController:
         )
         self._widget.txt_threshold.textChanged.connect(self._txt_threshold_text_changed)
         self._widget.txt_scan.textChanged.connect(self._txt_scan_text_changed)
-        self._widget.check_repeated.stateChanged.connect(self._check_repeated_changed)
+        self._widget.spin_repetitions.valueChanged.connect(
+            self._spin_repetitions_value_changed
+        )
+        self._widget.spin_file_number.valueChanged.connect(
+            self._spin_file_number_value_changed
+        )
         self._widget.spin_load.valueChanged.connect(self._spin_load_value_changed)
         self._widget.spin_temperature.valueChanged.connect(
             self._spin_temperature_value_changed
@@ -29,7 +34,8 @@ class ExperimentController:
 
     def _update_experiment_values(self) -> None:
         """Update the experiment GUI values."""
-        self._widget.check_repeated.setChecked(self.model.repeat)
+        self._widget.spin_repetitions.setValue(self.model.repetitions)
+        self._widget.spin_file_number.setValue(self.model.file_number)
         self._widget.spin_load.setValue(self.model.load)
         self._widget.spin_temperature.setValue(self.model.temperature)
         self._widget.txt_threshold.setText(str(self.model.threshold))
@@ -74,6 +80,14 @@ class ExperimentController:
     def _txt_scan_text_changed(self) -> None:
         """Updates the current scan value based on user input."""
         self.model.scan = self._widget.txt_scan.text()
+
+    def _spin_repetitions_value_changed(self) -> None:
+        """Updates the current repetitions value based on user input."""
+        self.model.repetitions = self._widget.spin_repetitions.value()
+
+    def _spin_file_number_value_changed(self) -> None:
+        """Updates the current file number value based on user input."""
+        self.model.file_number = self._widget.spin_file_number.value()
 
     def _spin_load_value_changed(self) -> None:
         """Updates the current load value based on user input."""

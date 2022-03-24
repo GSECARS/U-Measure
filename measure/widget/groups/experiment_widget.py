@@ -5,7 +5,7 @@ from qtpy.QtWidgets import (
     QHBoxLayout,
     QLabel,
     QLineEdit,
-    QCheckBox,
+    QSpinBox,
     QDoubleSpinBox,
     QAbstractSpinBox,
 )
@@ -26,29 +26,35 @@ class ExperimentWidget(QGroupBox):
         # Initialize experiment group's widgets
         self._lbl_frequencies = QLabel("Frequencies")
         self._lbl_threshold = QLabel("Threshold")
+        self._lbl_repetitions = QLabel("Repetitions")
         self._lbl_scan = QLabel("Scan")
+        self._lbl_file_number = QLabel("#File")
         self._lbl_load = QLabel("Load (tons)")
         self._lbl_temperature = QLabel("Temperature (K)")
         self.txt_frequencies = QLineEdit()
         self.txt_threshold = QLineEdit()
         self.txt_scan = QLineEdit()
+        self.spin_repetitions = QSpinBox()
+        self.spin_file_number = QSpinBox()
         self.spin_load = QDoubleSpinBox()
         self.spin_temperature = QDoubleSpinBox()
-        self.check_repeated = QCheckBox("Repeated collection")
 
         # List of experiment group's widgets
         self._experiment_widgets = [
             self._lbl_frequencies,
             self._lbl_threshold,
+            self._lbl_repetitions,
             self._lbl_scan,
+            self._lbl_file_number,
             self._lbl_load,
             self._lbl_temperature,
             self.txt_frequencies,
             self.txt_threshold,
             self.txt_scan,
+            self.spin_repetitions,
+            self.spin_file_number,
             self.spin_load,
             self.spin_temperature,
-            self.check_repeated,
         ]
 
         # Run experiment group's widget methods
@@ -56,7 +62,6 @@ class ExperimentWidget(QGroupBox):
         self._configure_experiment_labels()
         self._configure_experiment_text_boxes()
         self._configure_experiment_spin_boxes()
-        self._configure_experiment_check_boxes()
         self._layout_experiment_widgets()
 
     def disable(self) -> None:
@@ -80,7 +85,9 @@ class ExperimentWidget(QGroupBox):
         labels = [
             self._lbl_frequencies,
             self._lbl_threshold,
+            self._lbl_repetitions,
             self._lbl_scan,
+            self._lbl_file_number,
             self._lbl_load,
             self._lbl_temperature,
         ]
@@ -111,26 +118,34 @@ class ExperimentWidget(QGroupBox):
 
     def _configure_experiment_spin_boxes(self) -> None:
         """Configuration of the experiment group's spin boxes."""
-        self.spin_load.setObjectName("spin-load")
+        spin_boxes = [
+            self.spin_repetitions,
+            self.spin_file_number,
+            self.spin_load,
+            self.spin_temperature,
+        ]
+        for spin_box in spin_boxes:
+            spin_box.setObjectName("spin-experiment")
+            spin_box.setAlignment(Qt.AlignCenter)
+            spin_box.setButtonSymbols(QAbstractSpinBox.NoButtons)
+
+        self.spin_repetitions.setMinimum(1)
+        self.spin_repetitions.setMaximum(10000)
+        self.spin_repetitions.setSingleStep(1)
+
+        self.spin_file_number.setMinimum(1)
+        self.spin_file_number.setMaximum(100000)
+        self.spin_file_number.setSingleStep(10)
+
         self.spin_load.setMinimum(0.0)
         self.spin_load.setMaximum(900.0)
         self.spin_load.setSingleStep(10.0)
         self.spin_load.setDecimals(1)
-        self.spin_load.setAlignment(Qt.AlignCenter)
-        self.spin_load.setButtonSymbols(QAbstractSpinBox.NoButtons)
 
-        self.spin_temperature.setObjectName("spin-temperature")
         self.spin_temperature.setMinimum(0.0)
         self.spin_temperature.setMaximum(3000.0)
         self.spin_temperature.setSingleStep(100.0)
         self.spin_temperature.setDecimals(1)
-        self.spin_temperature.setAlignment(Qt.AlignCenter)
-        self.spin_temperature.setButtonSymbols(QAbstractSpinBox.NoButtons)
-
-    def _configure_experiment_check_boxes(self) -> None:
-        """Configuration of the experiment group's check boxes."""
-        self.check_repeated.setTristate(False)
-        self.check_repeated.setObjectName("check-repeated")
 
     def _layout_experiment_widgets(self) -> None:
         """Sets the layout for the experiment group widgets."""
@@ -150,14 +165,17 @@ class ExperimentWidget(QGroupBox):
         # layout for load and temperature
         load_temperature_layout = QHBoxLayout()
         load_temperature_layout.setContentsMargins(0, 0, 0, 0)
-        load_temperature_layout.addWidget(self.check_repeated)
-        load_temperature_layout.addStretch(1)
-        load_temperature_layout.addWidget(self._lbl_scan)
-        load_temperature_layout.addWidget(self.txt_scan)
         load_temperature_layout.addWidget(self._lbl_load)
         load_temperature_layout.addWidget(self.spin_load)
         load_temperature_layout.addWidget(self._lbl_temperature)
         load_temperature_layout.addWidget(self.spin_temperature)
+        load_temperature_layout.addWidget(self._lbl_repetitions)
+        load_temperature_layout.addWidget(self.spin_repetitions)
+        load_temperature_layout.addStretch(1)
+        load_temperature_layout.addWidget(self._lbl_file_number)
+        load_temperature_layout.addWidget(self.spin_file_number)
+        load_temperature_layout.addWidget(self._lbl_scan)
+        load_temperature_layout.addWidget(self.txt_scan)
         experiment_layout.addLayout(load_temperature_layout, 1, 0, 1, 6)
 
         self.setLayout(experiment_layout)
