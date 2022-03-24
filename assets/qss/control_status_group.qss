@@ -13,7 +13,7 @@
     font-size: 18px;
 }
 
-#lbl-status:disabled {
+#lbl-status:disabled, #lbl-time:disabled {
     color: #b36060;
 }
 
@@ -38,7 +38,7 @@ QLine {
     background: #60b3a1;
     border:2px solid #60b3a1;
     color: #494a4d;
-    font-size: 16px;
+    font-size: 18px;
     border-radius: 4px;
     padding: 10px 30px;
 }

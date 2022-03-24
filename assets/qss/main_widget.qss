@@ -1,3 +1,28 @@
 #main-widget {
     background-color: #333436;
 }
+
+QScrollBar:vertical {
+    background-color: #494a4d;
+    border: none;
+    border-radius: 5px;
+    margin: 5px 0;
+	width: 10px;
+}
+
+QScrollBar::handle:vertical {
+    background-color: #d7dde0;
+    border-radius: 5px;
+    min-height: 15px;
+    padding: 10px;
+}
+
+QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical,
+QScrollBar::add-line:vertical, QScrollBar::sub-line:vertical {
+    background-color: none;
+    width: 0;
+}
+
+QScrollBar::handle:hover {
+    background-color: #b8c9d4;
+}

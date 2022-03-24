@@ -7,7 +7,7 @@
     color: #969fa3;
 }
 
-#txt-experiment, #spin-load, #spin-temperature {
+#txt-experiment, #spin-experiment {
     background-color: #d7dde0;
     color: #494a4d;
     border: 2px solid #d7dde0;
@@ -16,7 +16,7 @@
     padding: 1px 5px;
 }
 
-#txt-experiment:focus, #spin-load:focus, #spin-temperature:focus {
+#txt-experiment:focus, #spin-experiment:focus {
     border: 2px solid #60b3a1;
 }
 
@@ -56,7 +56,7 @@
     padding: 10px;
 }
 
-#txt-experiment:disabled, #spin-load:disabled, #spin-temperature:disabled {
+#txt-experiment:disabled, #spin-experiment:disabled {
     background-color: #cfd0d1;
     border: 2px solid #cfd0d1;
 }
