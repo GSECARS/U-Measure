@@ -25,7 +25,7 @@ class ControlStatusWidget(QGroupBox):
         # Initialize control group's widgets
         self._lbl_elapsed = QLabel("Elapsed time")
         self._lbl_feedback = QLabel("Feedback")
-        self.lbl_time = QLabel("00:00:00:000")
+        self.lbl_time = QLabel("0:00:00")
         self.lbl_status = QLabel("Idle")
         self.btn_collection = QPushButton("Collect")
         self.txt_feedback = QPlainTextEdit()
@@ -62,6 +62,7 @@ class ControlStatusWidget(QGroupBox):
         self.btn_collection.setObjectName("btn-collection")
         self.btn_collection.setFlat(True)
         self.btn_collection.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
+        self.btn_collection.setMinimumWidth(150)
 
     def _configure_control_status_text_boxes(self) -> None:
         """Configuration of the control group's text boxes."""
