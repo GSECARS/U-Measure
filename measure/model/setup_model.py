@@ -2,7 +2,7 @@ from dataclasses import dataclass, field
 from qtpy.QtCore import QSettings
 
 
-@dataclass(frozen=False)
+@dataclass(frozen=False, slots=True)
 class SetupModel:
     """Dataclass that holds all necessary data information for the setup section."""
 
