@@ -5,7 +5,6 @@ from qtpy.QtCore import QObject, Signal
 
 
 from measure.model import SetupModel, ExperimentModel
-from measure.widget.custom import MsgBox
 
 
 class VisaController(QObject):
@@ -32,9 +31,14 @@ class VisaController(QObject):
         self.connected = False
 
     def connect(self) -> None:
+        """Connects with the tek instruments."""
         try:
-            self._mso_resource = self._resource_manager.open_resource(f"TCPIP::{self._setup_model.mso}::INSTR")
-            self._afg_resource = self._resource_manager.open_resource(f"TCPIP::{self._setup_model.afg}::INSTR")
+            self._mso_resource = self._resource_manager.open_resource(
+                f"TCPIP::{self._setup_model.mso}::INSTR"
+            )
+            self._afg_resource = self._resource_manager.open_resource(
+                f"TCPIP::{self._setup_model.afg}::INSTR"
+            )
         except VisaIOError as error:
             self.connected = False
             error_message = f"VisaIOError: {error.description} ({error.error_code})."
@@ -50,17 +54,21 @@ class VisaController(QObject):
         abort_status: bool,
         step: Optional[int] = 1,
     ) -> None:
+        """Sends all the acquire commands to the mso instrument."""
+
         self._mso_resource.write(":acquire:state stop")
         self._mso_resource.write("acquire:stopafter sequence")
         self._mso_resource.write(":acquire:state run")
 
-
-        print("Before")
-        while self._mso_resource.query_ascii_values(':acquire:state?',converter='b')[0] == 1:
+        while (
+            self._mso_resource.query_ascii_values(":acquire:state?", converter="b")[0]
+            == 1
+        ):
+            if abort_status:
+                return None
             time.sleep(1.0)
         time.sleep(2.0)
 
-        print("After")
         self._mso_resource.write(":save:waveform:fileformat auto")
 
         run_number = self._setup_model.run_number
@@ -68,7 +76,7 @@ class VisaController(QObject):
         temperature = self._experiment_model.temperature
 
         filename = (
-                self._basedir + f"{run_number}_{load}ton_{temperature}K_{frequency}MHz"
+            self._basedir + f"{run_number}_{load}ton_{temperature}K_{frequency}MHz"
         )
         if self._experiment_model.repetitions > 1:
             scan = self._experiment_model.scan
@@ -85,6 +93,7 @@ class VisaController(QObject):
         time.sleep(2.0)
 
     def _send_signal(self, frequency: float, number_of_cycles: int) -> None:
+        """Sends the collection commands to the afg instrument."""
         vpp = self._setup_model.vpp
 
         self._afg_resource.write(":output1:state off")
@@ -107,10 +116,13 @@ class VisaController(QObject):
         )
 
     def collect_data(self, abort_status: bool) -> None:
+        """Runs the data collection loop, accounts for multiple iterations."""
 
         if self.connected:
             repetitions = self._experiment_model.repetitions
             current_index = 0
+
+            file_number = self._experiment_model.file_number
 
             while repetitions > 0:
 
@@ -119,10 +131,12 @@ class VisaController(QObject):
 
                 current_index += 1
                 self.current_repetition.emit(current_index)
-                self._collection_process(abort_status=abort_status)
+                self._collection_process(abort_status=abort_status, step=file_number)
                 repetitions -= 1
+                file_number += 1
 
     def restore_defaults(self) -> None:
+        """Sends some default values to the instruments."""
         if self.connected:
             self._afg_resource.write(":source1:burst:ncycles 1")
             self._afg_resource.write(":source1:function:shape user1")
@@ -133,6 +147,7 @@ class VisaController(QObject):
             self._mso_resource.write(":acquire:state run")
 
     def _collection_process(self, abort_status: bool, step: Optional[int] = 1) -> None:
+        """The collection process for one iteration, multiple frequencies can be used."""
 
         for index, frequency in enumerate(self._experiment_model.frequencies):
 
@@ -142,4 +157,6 @@ class VisaController(QObject):
                 number_of_cycles = 1
 
             self._send_signal(frequency=frequency, number_of_cycles=number_of_cycles)
-            self._acquire_signal(frequency=frequency, step=step, abort_status=abort_status)
+            self._acquire_signal(
+                frequency=frequency, step=step, abort_status=abort_status
+            )

@@ -25,14 +25,12 @@ class MainController(QObject):
 
         # Setup controller
         self._setup_controller = SetupController(
-            widget=self._widget.group_widget.setup,
-            settings=self._settings
+            widget=self._widget.group_widget.setup, settings=self._settings
         )
 
         # Experiment controller
         self._experiment_controller = ExperimentController(
-            widget=self._widget.group_widget.experiment,
-            settings=self._settings
+            widget=self._widget.group_widget.experiment, settings=self._settings
         )
 
         # Visa controller
@@ -42,20 +40,21 @@ class MainController(QObject):
             basedir=self._setup_controller.basedir,
         )
 
+        # Helpers
+        self._collecting = False
+        self._aborting = False
+        self._input_check_passed = True
+        self._start_time = None
+
         # Thread and timer
         self._main_timer = QTimer()
         self._main_timer.setInterval(30)
         self._main_worker = GUIWorker(self._worker_process, ())
         self._main_worker.start()
 
-        self._start_time = None
-
+        # Run methods
         self._configure_widgets()
         self._connect_widgets()
-
-        self._collecting = False
-        self._aborting = False
-        self._input_check_passed = True
 
     def _configure_widgets(self) -> None:
         """Sets some configuration values before opening the main application window."""
@@ -63,8 +62,13 @@ class MainController(QObject):
         self._widget.group_widget.setup.lbl_path.setFocus()
 
     def _connect_widgets(self) -> None:
-        self._visa_controller.new_feedback_message.connect(self._visa_controller_message)
-        self._visa_controller.current_repetition.connect(self._change_current_repetition)
+        """Connects signals and slots for some, of the available, widgets."""
+        self._visa_controller.new_feedback_message.connect(
+            self._visa_controller_message
+        )
+        self._visa_controller.current_repetition.connect(
+            self._change_current_repetition
+        )
 
         self._main_timer.timeout.connect(self._timer_ticks)
         self._widget.group_widget.control_status.btn_collection.clicked.connect(
@@ -75,19 +79,23 @@ class MainController(QObject):
         self.finished.connect(self._change_to_idle)
 
     def disable_widgets(self) -> None:
+        """Disables setup and experiment widgets."""
         self._widget.group_widget.setup.disable()
         self._widget.group_widget.experiment.disable()
 
     def enable_widgets(self) -> None:
+        """Enables setup and experiment widgets."""
         self._widget.group_widget.setup.enable()
         self._widget.group_widget.experiment.enable()
 
     def _timer_ticks(self) -> None:
+        """Timer tick timeout method."""
         elapsed_time = datetime.datetime.now() - self._start_time
         current_delta = datetime.timedelta(seconds=elapsed_time.seconds)
         self._widget.group_widget.control_status.lbl_time.setText(str(current_delta))
 
     def _change_to_collecting(self) -> None:
+        """Changes the collection status to collecting."""
         self.disable_widgets()
 
         self._append_feedback(message="Starting new collection process.")
@@ -102,6 +110,7 @@ class MainController(QObject):
         self._widget.group_widget.control_status.lbl_repetition_status.setVisible(True)
 
     def _change_to_idle(self) -> None:
+        """Changes the collection status to idle."""
         self.enable_widgets()
         self._aborting = False
         self._collecting = False
@@ -118,10 +127,12 @@ class MainController(QObject):
         self._main_timer.stop()
 
     def _change_to_aborting(self) -> None:
+        """Changes the collection status to aborting."""
         self._widget.group_widget.control_status.lbl_status.setText("Aborting")
         self._aborting = True
 
     def _change_current_repetition(self, repetition: int) -> None:
+        """Changes the current status text of the repetitions."""
         self._widget.group_widget.control_status.lbl_repetition_status.setText(
             f"{repetition}/{self._experiment_controller.model.repetitions}"
         )
@@ -138,6 +149,7 @@ class MainController(QObject):
         return self._input_check_passed
 
     def _check_for_valid_ip(self, field_name: str, ip: str) -> bool:
+        """Checks if the input is a valid IPv4."""
         sections = ip.split(".")
 
         if len(sections) != 4:
@@ -158,58 +170,52 @@ class MainController(QObject):
         return self._input_check_passed
 
     def _check_input_before_collection(self) -> None:
+        """Runs the check methods before starting a collection."""
 
         if not self._check_for_empty_txt_boxes(
-            field_name="MSO",
-            text=self._setup_controller.model.mso
+            field_name="MSO", text=self._setup_controller.model.mso
         ):
             return None
 
         if not self._check_for_empty_txt_boxes(
-            field_name="AFG",
-            text=self._setup_controller.model.afg
+            field_name="AFG", text=self._setup_controller.model.afg
         ):
             return None
 
         if not self._check_for_empty_txt_boxes(
-            field_name="Cycle",
-            text=self._setup_controller.model.cycle
+            field_name="Cycle", text=self._setup_controller.model.cycle
         ):
             return None
 
         if not self._check_for_empty_txt_boxes(
-            field_name="#Run",
-            text=self._setup_controller.model.run_number
+            field_name="#Run", text=self._setup_controller.model.run_number
         ):
             return None
 
         if not self._check_for_empty_txt_boxes(
             field_name="Threshold",
-            text=str(self._experiment_controller.model.threshold)
+            text=str(self._experiment_controller.model.threshold),
         ):
             return None
 
         if self._experiment_controller.model.repetitions > 1:
             if not self._check_for_empty_txt_boxes(
-                field_name="Scan",
-                text=self._experiment_controller.model.scan
+                field_name="Scan", text=self._experiment_controller.model.scan
             ):
                 return None
 
         if not self._check_for_valid_ip(
-            field_name="MSO",
-            ip=self._setup_controller.model.mso
+            field_name="MSO", ip=self._setup_controller.model.mso
         ):
             return None
 
         if not self._check_for_valid_ip(
-            field_name="AFG",
-            ip=self._setup_controller.model.afg
+            field_name="AFG", ip=self._setup_controller.model.afg
         ):
             return None
 
     def _btn_collection_clicked(self) -> None:
-
+        """Starts/stops a collection on button click."""
         if self._collecting:
             self.abort_triggered.emit()
             return None
@@ -220,13 +226,12 @@ class MainController(QObject):
         if not self._input_check_passed:
             return None
 
-        bold = u"\033[1m"
-        bold_close = ""
         _msg_question = QMessageBox.question(
-            self._widget, "Collection confirmation",
-            f"The load and temperature of the experiment are {self._experiment_controller.model.load}\033[0m\nI tons and\n"
+            self._widget,
+            "Collection confirmation",
+            f"The load and temperature of the experiment are {self._experiment_controller.model.load} tons and\n"
             f"{self._experiment_controller.model.temperature} K, respectively.\n\n"
-            f"Are you sure you want to continue with the collection?"
+            f"Are you sure you want to continue with the collection?",
         )
 
         if _msg_question != QMessageBox.Yes:
@@ -239,7 +244,7 @@ class MainController(QObject):
         self._main_timer.start()
 
     def _worker_process(self) -> None:
-
+        """Continuously run a thread to keep GUI from freezing."""
         while not self._widget.terminated:
 
             if self._collecting:
@@ -250,9 +255,11 @@ class MainController(QObject):
             self._visa_controller.restore_defaults()
 
     def _visa_controller_message(self, message: str):
+        """Adds some information on the feedback section."""
         self._append_feedback(message=message)
 
     def _append_feedback(self, message: str):
+        """Adds a new line with the input text on the feedback text widget."""
         self._widget.group_widget.control_status.txt_feedback.appendPlainText(
             f"[{datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')}] - {message}"
         )
@@ -261,6 +268,6 @@ class MainController(QObject):
         """Starts the application."""
         self._widget.display(
             window_size=self._settings.value("window_size"),
-            window_position=self._settings.value("window_position")
+            window_position=self._settings.value("window_position"),
         )
         sys.exit(self._app.exec())
