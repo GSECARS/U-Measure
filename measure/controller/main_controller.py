@@ -183,16 +183,6 @@ class MainController(QObject):
             return None
 
         if not self._check_for_empty_txt_boxes(
-            field_name="Cycle", text=self._setup_controller.model.cycle
-        ):
-            return None
-
-        if not self._check_for_empty_txt_boxes(
-            field_name="#Run", text=self._setup_controller.model.run_number
-        ):
-            return None
-
-        if not self._check_for_empty_txt_boxes(
             field_name="Threshold",
             text=str(self._experiment_controller.model.threshold),
         ):

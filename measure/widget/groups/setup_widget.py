@@ -28,13 +28,17 @@ class SetupWidget(QGroupBox):
         # Initialize setup group's widgets
         self._lbl_mso = QLabel("MSO")
         self._lbl_afg = QLabel("AFG")
+        self._lbl_hutch = QLabel("Hutch")
         self._lbl_cycle = QLabel("Cycle")
+        self._lbl_institution = QLabel("Institution")
         self._lbl_run_number = QLabel("#Run")
         self._lbl_vpp = QLabel("Vpp")
         self.lbl_path = QLabel()
         self.txt_mso = QLineEdit()
         self.txt_afg = QLineEdit()
+        self.txt_hutch = QLineEdit()
         self.txt_cycle = QLineEdit()
+        self.txt_institution = QLineEdit()
         self.txt_run_number = QLineEdit()
         self.spin_vpp = QDoubleSpinBox()
         self.btn_reset = QPushButton("Reset")
@@ -43,12 +47,16 @@ class SetupWidget(QGroupBox):
         self._setup_widgets = [
             self._lbl_mso,
             self._lbl_afg,
+            self._lbl_hutch,
             self._lbl_cycle,
+            self._lbl_institution,
             self._lbl_run_number,
             self._lbl_vpp,
             self.txt_mso,
             self.txt_afg,
+            self.txt_hutch,
             self.txt_cycle,
+            self.txt_institution,
             self.txt_run_number,
             self.spin_vpp,
             self.btn_reset,
@@ -84,7 +92,9 @@ class SetupWidget(QGroupBox):
         labels = [
             self._lbl_mso,
             self._lbl_afg,
+            self._lbl_hutch,
             self._lbl_cycle,
+            self._lbl_institution,
             self._lbl_run_number,
             self._lbl_vpp,
             self.lbl_path,
@@ -94,7 +104,10 @@ class SetupWidget(QGroupBox):
 
     def _configure_setup_text_boxes(self) -> None:
         """Configuration of the setup group's text boxes."""
-        txt_boxes = [self.txt_mso, self.txt_afg, self.txt_cycle, self.txt_run_number]
+        txt_boxes = [
+            self.txt_mso, self.txt_afg, self.txt_hutch,
+            self.txt_cycle, self.txt_institution, self.txt_run_number
+        ]
         [txt_box.setObjectName("txt-setup") for txt_box in txt_boxes]
 
         # IP validator
@@ -106,7 +119,9 @@ class SetupWidget(QGroupBox):
         # Alignment
         self.txt_mso.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)
         self.txt_afg.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)
+        self.txt_hutch.setAlignment(Qt.AlignHCenter | Qt.AlignVCenter)
         self.txt_cycle.setAlignment(Qt.AlignHCenter | Qt.AlignVCenter)
+        self.txt_institution.setAlignment(Qt.AlignHCenter | Qt.AlignVCenter)
         self.txt_run_number.setAlignment(Qt.AlignHCenter | Qt.AlignVCenter)
 
     def _configure_setup_spin_boxes(self) -> None:
@@ -133,8 +148,14 @@ class SetupWidget(QGroupBox):
         self.txt_afg.returnPressed.connect(
             lambda: self._txt_return_pressed(self.txt_afg)
         )
+        self.txt_hutch.returnPressed.connect(
+            lambda: self._txt_return_pressed(self.txt_hutch)
+        )
         self.txt_cycle.returnPressed.connect(
             lambda: self._txt_return_pressed(self.txt_cycle)
+        )
+        self.txt_institution.returnPressed.connect(
+            lambda: self._txt_return_pressed(self.txt_institution)
         )
         self.txt_run_number.returnPressed.connect(
             lambda: self._txt_return_pressed(self.txt_run_number)
@@ -170,8 +191,12 @@ class SetupWidget(QGroupBox):
         # layout for cycle, #run and vpp widgets
         run_vpp_layout = QHBoxLayout()
         run_vpp_layout.setContentsMargins(0, 0, 0, 0)
+        run_vpp_layout.addWidget(self._lbl_hutch)
+        run_vpp_layout.addWidget(self.txt_hutch)
         run_vpp_layout.addWidget(self._lbl_cycle)
         run_vpp_layout.addWidget(self.txt_cycle)
+        run_vpp_layout.addWidget(self._lbl_institution)
+        run_vpp_layout.addWidget(self.txt_institution)
         run_vpp_layout.addWidget(self._lbl_run_number)
         run_vpp_layout.addWidget(self.txt_run_number)
         run_vpp_layout.addWidget(self._lbl_vpp)
