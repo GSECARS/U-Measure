@@ -1,4 +1,5 @@
 import time
+from datetime import datetime
 from pyvisa import ResourceManager, VisaIOError
 from typing import Optional
 from qtpy.QtCore import QObject, Signal
@@ -75,8 +76,12 @@ class VisaController(QObject):
         load = self._experiment_model.load
         temperature = self._experiment_model.temperature
 
+        timestamp = ""
+        if self._experiment_model.repetitions == 1:
+            timestamp = "_" + datetime.now().strftime("%m/%d/%Y_%H:%M:%S")
+
         filename = (
-            self._basedir + f"{run_number}_{load}ton_{temperature}K_{frequency}MHz"
+            self._basedir + f"{run_number}_{load}ton_{temperature}K_{frequency}MHz{timestamp}"
         )
         if self._experiment_model.repetitions > 1:
             scan = self._experiment_model.scan
