@@ -1,4 +1,4 @@
-import os
+from pathlib import Path
 from qtpy.QtWidgets import (
     QGroupBox,
     QGridLayout,
@@ -13,16 +13,16 @@ from qtpy.QtWidgets import (
 from qtpy.QtCore import Qt, QRegularExpression
 from qtpy.QtGui import QRegularExpressionValidator
 
-from measure.util import qss_path
+from measure.model import PathModel
 
 
 class SetupWidget(QGroupBox):
     """Setup widget groupbox to be used in the MainWidget."""
 
-    _qss = os.path.join(qss_path, "setup_group.qss")
-
-    def __init__(self) -> None:
+    def __init__(self, model: PathModel) -> None:
         super(SetupWidget, self).__init__()
+
+        self._qss = Path(model.qss_path, "setup_group.qss").as_posix()
 
         # Initialize setup group's widgets
         self._lbl_mso = QLabel("MSO")

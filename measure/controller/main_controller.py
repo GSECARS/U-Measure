@@ -6,6 +6,7 @@ from qtpy.QtCore import QSettings, QObject, Signal, QTimer
 
 from measure.widget import MainWidget
 from measure.widget.custom import MsgBox
+from measure.model import PathModel
 from measure.util import GUIWorker
 from measure.controller import SetupController, ExperimentController, VisaController
 
@@ -21,7 +22,8 @@ class MainController(QObject):
         super(MainController, self).__init__()
         self._app = QApplication(sys.argv)
         self._settings = QSettings("GSECARS", "U-Measure")
-        self._widget = MainWidget(settings=self._settings)
+        self._model = PathModel()
+        self._widget = MainWidget(settings=self._settings, model=self._model)
 
         # Setup controller
         self._setup_controller = SetupController(

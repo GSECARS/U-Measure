@@ -1,4 +1,4 @@
-import os
+from pathlib import Path
 from qtpy.QtWidgets import (
     QGroupBox,
     QGridLayout,
@@ -12,16 +12,16 @@ from qtpy.QtWidgets import (
 from qtpy.QtCore import Qt, QRegularExpression
 from qtpy.QtGui import QRegularExpressionValidator
 
-from measure.util import qss_path
+from measure.model import PathModel
 
 
 class ExperimentWidget(QGroupBox):
     """Experiment widget groupbox to be used in the MainWidget."""
 
-    _qss = os.path.join(qss_path, "experiment_group.qss")
-
-    def __init__(self) -> None:
+    def __init__(self, model: PathModel) -> None:
         super(ExperimentWidget, self).__init__()
+
+        self._qss = Path(model.qss_path, "experiment_group.qss").as_posix()
 
         # Initialize experiment group's widgets
         self._lbl_frequencies = QLabel("Frequencies")

@@ -1,4 +1,4 @@
-import os
+from pathlib import Path
 from qtpy.QtWidgets import (
     QGroupBox,
     QGridLayout,
@@ -10,17 +10,17 @@ from qtpy.QtWidgets import (
 )
 from qtpy.QtCore import Qt
 
-from measure.util import qss_path
+from measure.model import PathModel
 from measure.widget.custom import QLine
 
 
 class ControlStatusWidget(QGroupBox):
     """Control and status widget groupbox to be used in the MainWidget."""
 
-    _qss = os.path.join(qss_path, "control_status_group.qss")
-
-    def __init__(self) -> None:
+    def __init__(self, model: PathModel) -> None:
         super(ControlStatusWidget, self).__init__()
+
+        self._qss = Path(model.qss_path, "control_status_group.qss").as_posix()
 
         # Initialize control group's widgets
         self._lbl_elapsed = QLabel("Elapsed time")

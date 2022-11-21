@@ -1,17 +1,18 @@
 from qtpy.QtWidgets import QWidget, QGridLayout
 
+from measure.model import PathModel
 from measure.widget.groups import SetupWidget, ExperimentWidget, ControlStatusWidget
 
 
 class MainGroupWidget(QWidget):
     """Custom widget to hold all the groupboxes."""
 
-    def __init__(self) -> None:
+    def __init__(self, model: PathModel) -> None:
         super(MainGroupWidget, self).__init__()
 
-        self.setup = SetupWidget()
-        self.experiment = ExperimentWidget()
-        self.control_status = ControlStatusWidget()
+        self.setup = SetupWidget(model=model)
+        self.experiment = ExperimentWidget(model=model)
+        self.control_status = ControlStatusWidget(model=model)
 
         self._layout_widgets()
 

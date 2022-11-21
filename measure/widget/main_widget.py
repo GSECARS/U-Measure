@@ -1,24 +1,24 @@
-import os
+from pathlib import Path
 from typing import Optional
 from qtpy.QtWidgets import QWidget, QMessageBox, QHBoxLayout
 from qtpy.QtGui import QCloseEvent, QIcon
 from qtpy.QtCore import QSettings, QSize, QPoint
 
+from measure.model import PathModel
 from measure.widget.groups import MainGroupWidget
-from measure.util import qss_path, icon_path
 
 
 class MainWidget(QWidget):
     """This is used as the main application window."""
 
-    _icon: str = os.path.join(icon_path, "ultrasonic_icon.ico")
-    _qss: str = os.path.join(qss_path, "main_widget.qss")
-
-    def __init__(self, settings: QSettings) -> None:
+    def __init__(self, settings: QSettings, model: PathModel) -> None:
         super(MainWidget, self).__init__()
 
+        self._icon: str = Path(model.icon_path, "ultrasonic_icon.ico").as_posix()
+        self._qss: str = Path(model.qss_path, "main_widget.qss").as_posix()
+
         self._settings = settings
-        self.group_widget = MainGroupWidget()
+        self.group_widget = MainGroupWidget(model=model)
 
         # Event helpers
         self._terminated: bool = False
