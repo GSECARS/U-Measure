@@ -21,7 +21,9 @@ class SetupModel:
         object.__setattr__(self, "_afg", self.settings.value("afg", type=str))
         object.__setattr__(self, "_hutch", self.settings.value("hutch", type=str))
         object.__setattr__(self, "_cycle", self.settings.value("cycle", type=str))
-        object.__setattr__(self, "_institution", self.settings.value("institution", type=str))
+        object.__setattr__(
+            self, "_institution", self.settings.value("institution", type=str)
+        )
         object.__setattr__(
             self, "_run_number", self.settings.value("run_number", type=str)
         )

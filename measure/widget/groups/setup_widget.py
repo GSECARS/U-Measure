@@ -3,7 +3,6 @@ from qtpy.QtWidgets import (
     QGroupBox,
     QGridLayout,
     QHBoxLayout,
-    QVBoxLayout,
     QSizePolicy,
     QLabel,
     QLineEdit,
@@ -105,8 +104,12 @@ class SetupWidget(QGroupBox):
     def _configure_setup_text_boxes(self) -> None:
         """Configuration of the setup group's text boxes."""
         txt_boxes = [
-            self.txt_mso, self.txt_afg, self.txt_hutch,
-            self.txt_cycle, self.txt_institution, self.txt_run_number
+            self.txt_mso,
+            self.txt_afg,
+            self.txt_hutch,
+            self.txt_cycle,
+            self.txt_institution,
+            self.txt_run_number,
         ]
         [txt_box.setObjectName("txt-setup") for txt_box in txt_boxes]
 
