@@ -6,8 +6,7 @@ from qtpy.QtCore import QSettings, QObject, Signal, QTimer
 
 from measure.widget import MainWidget
 from measure.widget.custom import MsgBox
-from measure.model import PathModel
-from measure.util import GUIWorker
+from measure.model import PathModel, QtWorkerModel
 from measure.controller import SetupController, ExperimentController, VisaController
 
 
@@ -52,7 +51,7 @@ class MainController(QObject):
         # Thread and timer
         self._main_timer = QTimer()
         self._main_timer.setInterval(30)
-        self._main_worker = GUIWorker(self._worker_process, ())
+        self._main_worker = QtWorkerModel(self._worker_process, ())
         self._main_worker.start()
 
         # Run methods
