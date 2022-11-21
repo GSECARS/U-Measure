@@ -19,6 +19,7 @@ class VisaController(QObject):
         setup_model: SetupModel,
         experiment_model: ExperimentModel,
         basedir: str,
+        base_dir_changed: Signal(str),
     ) -> None:
         super(VisaController, self).__init__()
 
@@ -26,10 +27,17 @@ class VisaController(QObject):
         self._experiment_model = experiment_model
         self._basedir = basedir
 
+        self._base_dir_changed = base_dir_changed
+        self._base_dir_changed.connect(self._update_base_dir)
+
         self._resource_manager = ResourceManager()
         self._mso_resource = None
         self._afg_resource = None
         self.connected = False
+
+    def _update_base_dir(self, base_dir: str) -> None:
+        self._basedir = base_dir
+        print(base_dir)
 
     def connect(self) -> None:
         """Connects with the tek instruments."""
@@ -78,10 +86,11 @@ class VisaController(QObject):
 
         timestamp = ""
         if self._experiment_model.repetitions == 1:
-            timestamp = "_" + datetime.now().strftime("%m/%d/%Y_%H:%M:%S")
+            timestamp = "_" + datetime.now().strftime("%m.%d.%Y_%H.%M.%S")
 
         filename = (
-            self._basedir + f"{run_number}_{load}ton_{temperature}K_{frequency}MHz{timestamp}"
+            self._basedir
+            + f"{run_number}_{load}ton_{temperature}K_{frequency}MHz{timestamp}"
         )
         if self._experiment_model.repetitions > 1:
             scan = self._experiment_model.scan
@@ -145,7 +154,7 @@ class VisaController(QObject):
         if self.connected:
             self._afg_resource.write(":source1:burst:ncycles 1")
             self._afg_resource.write(":source1:function:shape user1")
-            self._afg_resource.write(f":source1:frequency {30.0e6 / 2.0}")
+            self._afg_resource.write(f":source1:frequency {70.0e6 / 2.0}")
             self._afg_resource.write(":output1:state on")
 
             self._mso_resource.write("acquire:stopafter runstop")
