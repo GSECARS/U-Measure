@@ -38,6 +38,7 @@ class MainController(QObject):
             setup_model=self._setup_controller.model,
             experiment_model=self._experiment_controller.model,
             basedir=self._setup_controller.basedir,
+            base_dir_changed=self._setup_controller.base_dir_changed,
         )
 
         # Helpers
@@ -254,9 +255,10 @@ class MainController(QObject):
             f"[{datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')}] - {message}"
         )
 
-    def run(self) -> None:
+    def run(self, version: str) -> None:
         """Starts the application."""
         self._widget.display(
+            version=version,
             window_size=self._settings.value("window_size"),
             window_position=self._settings.value("window_position"),
         )

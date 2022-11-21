@@ -1,15 +1,17 @@
-from qtpy.QtCore import QSettings
+from qtpy.QtCore import QSettings, Signal, QObject
 
 from measure.model import SetupModel
 from measure.widget.groups import SetupWidget
 
 
-class SetupController:
+class SetupController(QObject):
     """Provides a way to control and connect the setup widget with the setup model."""
 
+    base_dir_changed: Signal = Signal(str)
     basedir: str = None
 
     def __init__(self, widget: SetupWidget, settings: QSettings) -> None:
+        super(SetupController, self).__init__()
         self.model = SetupModel(settings=settings)
         self._widget = widget
 
@@ -23,7 +25,9 @@ class SetupController:
         self._widget.txt_afg.textChanged.connect(self._txt_afg_text_changed)
         self._widget.txt_hutch.textChanged.connect(self._txt_hutch_text_changed)
         self._widget.txt_cycle.textChanged.connect(self._txt_cycle_text_changed)
-        self._widget.txt_institution.textChanged.connect(self._txt_institution_text_changed)
+        self._widget.txt_institution.textChanged.connect(
+            self._txt_institution_text_changed
+        )
         self._widget.txt_run_number.textChanged.connect(
             self._txt_run_number_text_changed
         )
@@ -59,10 +63,8 @@ class SetupController:
         if not self.model.run_number.strip() == "":
             run_number = self.model.run_number + "/"
 
-
-        self.basedir = (
-            f"C:/Data/{hutch}{cycle}{institution}{run_number}"
-        )
+        self.basedir = f"C:/Data/{hutch}{cycle}{institution}{run_number}"
+        self.base_dir_changed.emit(self.basedir)
         self._widget.lbl_path.setText(self.basedir)
 
     def _txt_mso_text_changed(self) -> None:

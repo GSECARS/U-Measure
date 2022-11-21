@@ -13,7 +13,6 @@ class MainWidget(QWidget):
 
     _icon: str = os.path.join(icon_path, "ultrasonic_icon.ico")
     _qss: str = os.path.join(qss_path, "main_widget.qss")
-    _title: str = "U-Measure"
 
     def __init__(self, settings: QSettings) -> None:
         super(MainWidget, self).__init__()
@@ -33,9 +32,6 @@ class MainWidget(QWidget):
         # Set application object name
         self.setObjectName("main-widget")
 
-        # Sets the application title
-        self.setWindowTitle(self._title)
-
         # Sets the application icon
         self.setWindowIcon(QIcon(self._icon))
 
@@ -51,12 +47,14 @@ class MainWidget(QWidget):
 
     def display(
         self,
+        version: str,
         window_size: Optional[QSize] = None,
         window_position: Optional[QPoint] = None,
     ) -> None:
         """Displays, resizes and moves the main application window."""
         # Show the main application window
-        self.showNormal()
+        self.setWindowTitle(f"U-Measure {version}")  # Set the title
+        self.showNormal()  # Display
 
         # Resize the main application window
         if window_size is not None:
