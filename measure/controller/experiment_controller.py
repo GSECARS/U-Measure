@@ -40,6 +40,7 @@ class ExperimentController:
             self._txt_frequencies_text_changed
         )
         self._widget.txt_threshold.textChanged.connect(self._txt_threshold_text_changed)
+        self._widget.txt_reset.textChanged.connect(self._txt_reset_text_changed)
         self._widget.txt_scan.textChanged.connect(self._txt_scan_text_changed)
         self._widget.spin_repetitions.valueChanged.connect(
             self._spin_repetitions_value_changed
@@ -59,6 +60,7 @@ class ExperimentController:
         self._widget.spin_load.setValue(self.model.load)
         self._widget.spin_temperature.setValue(self.model.temperature)
         self._widget.txt_threshold.setText(str(self.model.threshold))
+        self._widget.txt_reset.setText(str(self.model.reset_frequency))
         self._widget.txt_scan.setText(self.model.scan)
 
         # Update frequencies text
@@ -89,6 +91,10 @@ class ExperimentController:
     def _txt_threshold_text_changed(self) -> None:
         """Updates the current threshold value based on user input."""
         self.model.threshold = float(self._widget.txt_threshold.text())
+
+    def _txt_reset_text_changed(self) -> None:
+        """Updates the current reset frequency based on user input."""
+        self.model.reset_frequency = float(self._widget.txt_reset.text())
 
     def _check_repeated_changed(self, state) -> None:
         """Updates the current repeat value based on user input."""

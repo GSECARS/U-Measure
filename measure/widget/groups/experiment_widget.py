@@ -46,6 +46,7 @@ class ExperimentWidget(QGroupBox):
         # Initialize experiment group's widgets
         self._lbl_frequencies = QLabel("Frequencies")
         self._lbl_threshold = QLabel("Threshold")
+        self._lbl_reset = QLabel("Reset")
         self._lbl_repetitions = QLabel("Repetitions")
         self._lbl_scan = QLabel("Scan")
         self._lbl_file_number = QLabel("#File")
@@ -53,6 +54,7 @@ class ExperimentWidget(QGroupBox):
         self._lbl_temperature = QLabel("Temperature (K)")
         self.txt_frequencies = QLineEdit()
         self.txt_threshold = QLineEdit()
+        self.txt_reset = QLineEdit()
         self.txt_scan = QLineEdit()
         self.spin_repetitions = QSpinBox()
         self.spin_file_number = QSpinBox()
@@ -63,6 +65,7 @@ class ExperimentWidget(QGroupBox):
         self._experiment_widgets = [
             self._lbl_frequencies,
             self._lbl_threshold,
+            self._lbl_reset,
             self._lbl_repetitions,
             self._lbl_scan,
             self._lbl_file_number,
@@ -70,6 +73,7 @@ class ExperimentWidget(QGroupBox):
             self._lbl_temperature,
             self.txt_frequencies,
             self.txt_threshold,
+            self.txt_reset,
             self.txt_scan,
             self.spin_repetitions,
             self.spin_file_number,
@@ -105,6 +109,7 @@ class ExperimentWidget(QGroupBox):
         labels = [
             self._lbl_frequencies,
             self._lbl_threshold,
+            self._lbl_reset,
             self._lbl_repetitions,
             self._lbl_scan,
             self._lbl_file_number,
@@ -118,6 +123,7 @@ class ExperimentWidget(QGroupBox):
         self.txt_frequencies.setObjectName("txt-experiment")
         self.txt_threshold.setObjectName("txt-experiment")
         self.txt_scan.setObjectName("txt-experiment")
+        self.txt_reset.setObjectName("txt-experiment")
 
         # Validator for frequencies.
         expression = QRegularExpression("^(((?:0|[1-9][0-9]*)\.[0-9]+)*\, )*$")
@@ -128,12 +134,15 @@ class ExperimentWidget(QGroupBox):
         single_expression = QRegularExpression("^((?:0|[1-9][0-9]*)\.[0-9]+)$")
         single_validator = QRegularExpressionValidator(single_expression)
         self.txt_threshold.setValidator(single_validator)
+        self.txt_reset.setValidator(single_validator)
 
         self.txt_threshold.setMaximumWidth(52)
+        self.txt_reset.setMaximumWidth(52)
         self.txt_scan.setMinimumWidth(200)
 
         self.txt_frequencies.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)
         self.txt_threshold.setAlignment(Qt.AlignHCenter | Qt.AlignVCenter)
+        self.txt_reset.setAlignment(Qt.AlignHCenter | Qt.AlignVCenter)
         self.txt_scan.setAlignment(Qt.AlignHCenter | Qt.AlignVCenter)
 
     def _configure_experiment_spin_boxes(self) -> None:
@@ -180,6 +189,8 @@ class ExperimentWidget(QGroupBox):
         frequencies_layout.addWidget(self.txt_frequencies)
         frequencies_layout.addWidget(self._lbl_threshold)
         frequencies_layout.addWidget(self.txt_threshold)
+        frequencies_layout.addWidget(self._lbl_reset)
+        frequencies_layout.addWidget(self.txt_reset)
         experiment_layout.addLayout(frequencies_layout, 0, 0, 1, 6)
 
         # layout for load and temperature

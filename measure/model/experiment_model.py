@@ -32,6 +32,7 @@ class ExperimentModel:
         init=False, repr=False, compare=False, default_factory=lambda: []
     )
     _threshold: float = field(init=False, repr=False, compare=False, default=27.0)
+    _reset_frequency: float = field(init=False, repr=False, compare=False, default=30.0)
     _repetitions: int = field(init=False, repr=False, compare=False, default=1)
     _file_number: int = field(init=False, repr=False, compare=False, default=1)
     _scan: str = field(init=False, repr=False, compare=False, default="A")
@@ -49,6 +50,12 @@ class ExperimentModel:
         if threshold_value is None:
             threshold_value = 0.0
         object.__setattr__(self, "_threshold", threshold_value)
+
+        # Set reset frequency value
+        reset_frequency_value = self.settings.value("reset_frequency", type=float)
+        if reset_frequency_value is None:
+            reset_frequency_value = 0.0
+        object.__setattr__(self, "_reset_frequency", reset_frequency_value)
 
         # Set repetitions value
         repetitions_value = self.settings.value("repetitions", type=int)
@@ -78,6 +85,7 @@ class ExperimentModel:
         """Sets the default values for the experiment section."""
         object.__setattr__(self, "_frequencies", [20.0, 30.0, 40.0, 50.0, 60.0])
         object.__setattr__(self, "_threshold", 27)
+        object.__setattr__(self, "_reset_frequency", 30)
         object.__setattr__(self, "_repetitions", 1)
         object.__setattr__(self, "_file_number", 1)
         object.__setattr__(self, "_scan", "A")
@@ -100,6 +108,10 @@ class ExperimentModel:
     @property
     def threshold(self) -> float:
         return self._threshold
+
+    @property
+    def reset_frequency(self) -> float:
+        return self._reset_frequency
 
     @property
     def repetitions(self) -> int:
@@ -132,6 +144,12 @@ class ExperimentModel:
         if isinstance(value, float):
             object.__setattr__(self, "_threshold", value)
             self.settings.setValue("threshold", self._threshold)
+
+    @reset_frequency.setter
+    def reset_frequency(self, value) -> None:
+        if isinstance(value, float):
+            object.__setattr__(self, "_reset_frequency", value)
+            self.settings.setValue("reset_frequency", self._reset_frequency)
 
     @repetitions.setter
     def repetitions(self, value) -> None:

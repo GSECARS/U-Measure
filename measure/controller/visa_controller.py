@@ -170,11 +170,12 @@ class VisaController(QObject):
                 file_number += 1
 
     def restore_defaults(self) -> None:
+        reset_frequency = self._experiment_model.reset_frequency
         """Sends some default values to the instruments."""
         if self.connected:
             self._afg_resource.write(":source1:burst:ncycles 1")
             self._afg_resource.write(":source1:function:shape user1")
-            self._afg_resource.write(f":source1:frequency {70.0e6 / 2.0}")
+            self._afg_resource.write(f":source1:frequency {reset_frequency * 1.0e6 / 2.0}")
             self._afg_resource.write(":output1:state on")
 
             self._mso_resource.write("acquire:stopafter runstop")
