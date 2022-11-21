@@ -32,10 +32,13 @@ class PathModel:
 
     def __post_init__(self) -> None:
         object.__setattr__(
-            self, "_assets_path",
+            self,
+            "_assets_path",
             Path(Path.cwd(), "measure/assets").as_posix(),
         )
-        object.__setattr__(self, "_icon_path", Path(self._assets_path, "icons").as_posix())
+        object.__setattr__(
+            self, "_icon_path", Path(self._assets_path, "icons").as_posix()
+        )
         object.__setattr__(self, "_qss_path", Path(self._assets_path, "qss").as_posix())
 
     @property

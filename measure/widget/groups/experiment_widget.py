@@ -1,4 +1,3 @@
-from pathlib import Path
 # !/usr/bin/python3
 # ----------------------------------------------------------------------
 # U-Measure - A GUI software for ultrasonic data collection.
@@ -19,6 +18,7 @@ from pathlib import Path
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 # ----------------------------------------------------------------------
 
+from pathlib import Path
 from qtpy.QtWidgets import (
     QGroupBox,
     QGridLayout,
