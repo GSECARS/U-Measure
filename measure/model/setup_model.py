@@ -30,39 +30,26 @@ class SetupModel:
 
     _mso: str = field(init=False, repr=False, compare=False, default="")
     _afg: str = field(init=False, repr=False, compare=False, default="")
-    _hutch: str = field(init=False, repr=False, compare=False, default="")
-    _cycle: str = field(init=False, repr=False, compare=False, default="")
-    _institution: str = field(init=False, repr=False, compare=False, default="")
-    _run_number: str = field(init=False, repr=False, compare=False, default="")
-    _vpp: float = field(init=False, repr=False, compare=False, default=0.0)
+    _target: str = field(init=False, repr=False, compare=False, default="")
+    _prefix: str = field(init=False, repr=False, compare=False, default="")
+    _filename: str = field(init=False, repr=False, compare=False, default="")
 
     def __post_init__(self) -> None:
         object.__setattr__(self, "_mso", self.settings.value("mso", type=str))
         object.__setattr__(self, "_afg", self.settings.value("afg", type=str))
-        object.__setattr__(self, "_hutch", self.settings.value("hutch", type=str))
-        object.__setattr__(self, "_cycle", self.settings.value("cycle", type=str))
+        object.__setattr__(self, "_target", self.settings.value("target", type=str))
+        object.__setattr__(self, "_prefix", self.settings.value("prefix", type=str))
         object.__setattr__(
-            self, "_institution", self.settings.value("institution", type=str)
+            self, "_filename", self.settings.value("filename", type=str)
         )
-        object.__setattr__(
-            self, "_run_number", self.settings.value("run_number", type=str)
-        )
-
-        # Set vpp value
-        vpp_value = float(self.settings.value("vpp", type=float))
-        if vpp_value is None:
-            vpp_value = 0.0
-        object.__setattr__(self, "_vpp", vpp_value)
 
     def set_setup_defaults(self) -> None:
         """Sets the default values for the setup section."""
         object.__setattr__(self, "mso", "164.54.160.105")
         object.__setattr__(self, "afg", "164.54.160.117")
-        object.__setattr__(self, "hutch", "13BMD")
-        object.__setattr__(self, "cycle", "2022-2")
-        object.__setattr__(self, "institution", "GSECARS")
-        object.__setattr__(self, "run_number", "D2711")
-        object.__setattr__(self, "vpp", 2.0)
+        object.__setattr__(self, "target", "")
+        object.__setattr__(self, "prefix", "")
+        object.__setattr__(self, "filename", "")
 
     @property
     def mso(self) -> str:
@@ -73,24 +60,16 @@ class SetupModel:
         return self._afg
 
     @property
-    def hutch(self) -> str:
-        return self._hutch
+    def target(self) -> str:
+        return self._target
 
     @property
-    def cycle(self) -> str:
-        return self._cycle
+    def prefix(self) -> str:
+        return self._prefix
 
     @property
-    def institution(self) -> str:
-        return self._institution
-
-    @property
-    def vpp(self) -> float:
-        return self._vpp
-
-    @property
-    def run_number(self) -> str:
-        return self._run_number
+    def filename(self) -> str:
+        return self._filename
 
     @mso.setter
     def mso(self, value) -> None:
@@ -104,32 +83,20 @@ class SetupModel:
             object.__setattr__(self, "_afg", value)
             self.settings.setValue("afg", self._afg)
 
-    @hutch.setter
-    def hutch(self, value) -> None:
+    @target.setter
+    def target(self, value) -> None:
         if isinstance(value, str):
-            object.__setattr__(self, "_hutch", value)
-            self.settings.setValue("hutch", self._hutch)
+            object.__setattr__(self, "_target", value)
+            self.settings.setValue("target", self._target)
 
-    @cycle.setter
-    def cycle(self, value) -> None:
+    @prefix.setter
+    def prefix(self, value) -> None:
         if isinstance(value, str):
-            object.__setattr__(self, "_cycle", value)
-            self.settings.setValue("cycle", self._cycle)
+            object.__setattr__(self, "_prefix", value)
+            self.settings.setValue("prefix", self._prefix)
 
-    @institution.setter
-    def institution(self, value) -> None:
+    @filename.setter
+    def filename(self, value) -> None:
         if isinstance(value, str):
-            object.__setattr__(self, "_institution", value)
-            self.settings.setValue("institution", self._institution)
-
-    @run_number.setter
-    def run_number(self, value) -> None:
-        if isinstance(value, str):
-            object.__setattr__(self, "_run_number", value)
-            self.settings.setValue("run_number", self._run_number)
-
-    @vpp.setter
-    def vpp(self, value) -> None:
-        if isinstance(value, float):
-            object.__setattr__(self, "_vpp", value)
-            self.settings.setValue("vpp", self._vpp)
+            object.__setattr__(self, "_filename", value)
+            self.settings.setValue("filename", self._filename)

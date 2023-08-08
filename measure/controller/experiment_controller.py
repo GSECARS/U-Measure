@@ -45,23 +45,23 @@ class ExperimentController:
         self._widget.spin_repetitions.valueChanged.connect(
             self._spin_repetitions_value_changed
         )
+        self._widget.spin_cycles.valueChanged.connect(
+            self._spin_cycles_value_changed
+        )
         self._widget.spin_file_number.valueChanged.connect(
             self._spin_file_number_value_changed
         )
-        self._widget.spin_load.valueChanged.connect(self._spin_load_value_changed)
-        self._widget.spin_temperature.valueChanged.connect(
-            self._spin_temperature_value_changed
-        )
+        self._widget.spin_vpp.valueChanged.connect(self._spin_vpp_value_changed)
 
     def _update_experiment_values(self) -> None:
         """Update the experiment GUI values."""
         self._widget.spin_repetitions.setValue(self.model.repetitions)
+        self._widget.spin_cycles.setValue(self.model.cycles)
         self._widget.spin_file_number.setValue(self.model.file_number)
-        self._widget.spin_load.setValue(self.model.load)
-        self._widget.spin_temperature.setValue(self.model.temperature)
         self._widget.txt_threshold.setText(str(self.model.threshold))
         self._widget.txt_reset.setText(str(self.model.reset_frequency))
         self._widget.txt_scan.setText(self.model.scan)
+        self._widget.spin_vpp.setValue(self.model.vpp)
 
         # Update frequencies text
         frequencies_str = ""
@@ -111,14 +111,14 @@ class ExperimentController:
         """Updates the current repetitions value based on user input."""
         self.model.repetitions = self._widget.spin_repetitions.value()
 
+    def _spin_cycles_value_changed(self) -> None:
+        """Updates the current repetitions value based on user input."""
+        self.model.cycles = self._widget.spin_cycles.value()
+
     def _spin_file_number_value_changed(self) -> None:
         """Updates the current file number value based on user input."""
         self.model.file_number = self._widget.spin_file_number.value()
 
-    def _spin_load_value_changed(self) -> None:
-        """Updates the current load value based on user input."""
-        self.model.load = self._widget.spin_load.value()
-
-    def _spin_temperature_value_changed(self) -> None:
-        """Updates the current temperature value based on user input."""
-        self.model.temperature = self._widget.spin_temperature.value()
+    def _spin_vpp_value_changed(self) -> None:
+        """Updates the current vpp value based on user input."""
+        self.model.vpp = self._widget.spin_vpp.value()

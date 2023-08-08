@@ -100,17 +100,13 @@ class VisaController(QObject):
 
         self._mso_resource.write(":save:waveform:fileformat auto")
 
-        run_number = self._setup_model.run_number
-        load = self._experiment_model.load
-        temperature = self._experiment_model.temperature
-
         timestamp = ""
         if self._experiment_model.repetitions == 1:
             timestamp = "_" + datetime.now().strftime("%m.%d.%Y_%H.%M.%S")
 
         filename = (
             self._basedir
-            + f"{run_number}_{load}ton_{temperature}K_{frequency}MHz{timestamp}"
+            + f"_{frequency}MHz{timestamp}"
         )
         if self._experiment_model.repetitions > 1:
             scan = self._experiment_model.scan
@@ -118,7 +114,7 @@ class VisaController(QObject):
 
         filename += ".csv"
 
-        self._mso_resource.write(f":save:waveform ch1, '{filename}'")
+        self._mso_resource.write(f":save:waveform all, '{filename}'")
 
         self.new_feedback_message.emit(
             f"Waveform data at {frequency}MHz save in file {filename}."
@@ -128,17 +124,20 @@ class VisaController(QObject):
 
     def _send_signal(self, frequency: float, number_of_cycles: int) -> None:
         """Sends the collection commands to the afg instrument."""
-        vpp = self._setup_model.vpp
+        vpp = self._experiment_model.vpp
 
         self._afg_resource.write(":output1:state off")
-        self._afg_resource.write(":source1:burst:ncycles 1")
+        self._afg_resource.write(f":source1:burst:ncycles {number_of_cycles}")
 
-        if number_of_cycles == 2:
-            self._afg_resource.write(":source1:function:shape user1")
-            self._afg_resource.write(f":source1:frequency {frequency * 1.0e6/2.0}")
-        else:
-            self._afg_resource.write(":source1:function:shape sin")
-            self._afg_resource.write(f":source1:frequency {frequency * 1.0e6}")
+        self._afg_resource.write(":source1:function:shape sin")
+        self._afg_resource.write(f":source1:frequency {frequency * 1.0e6}")
+
+        # if number_of_cycles == 2:
+        #     self._afg_resource.write(":source1:function:shape user1")
+        #     self._afg_resource.write(f":source1:frequency {frequency * 1.0e6/2.0}")
+        # else:
+        #     self._afg_resource.write(":source1:function:shape sin")
+        #     self._afg_resource.write(f":source1:frequency {frequency * 1.0e6}")
 
         self._afg_resource.write(f":source1:voltage {vpp}")
         self._afg_resource.write(":source1:phase 0.0e0")
@@ -179,19 +178,19 @@ class VisaController(QObject):
             self._afg_resource.write(":output1:state on")
 
             self._mso_resource.write("acquire:stopafter runstop")
-            self._mso_resource.write(":acquire:state run")
+            # self._mso_resource.write(":acquire:state run")
 
     def _collection_process(self, abort_status: bool, step: Optional[int] = 1) -> None:
         """The collection process for one iteration, multiple frequencies can be used."""
 
         for index, frequency in enumerate(self._experiment_model.frequencies):
+            #
+            # if frequency > self._experiment_model.threshold:
+            #     number_of_cycles = 2
+            # else:
+            #     number_of_cycles = 1
 
-            if frequency > self._experiment_model.threshold:
-                number_of_cycles = 2
-            else:
-                number_of_cycles = 1
-
-            self._send_signal(frequency=frequency, number_of_cycles=number_of_cycles)
+            self._send_signal(frequency=frequency, number_of_cycles=self._experiment_model.cycles)
             self._acquire_signal(
                 frequency=frequency, step=step, abort_status=abort_status
             )

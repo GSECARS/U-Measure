@@ -34,10 +34,12 @@ class ExperimentModel:
     _threshold: float = field(init=False, repr=False, compare=False, default=27.0)
     _reset_frequency: float = field(init=False, repr=False, compare=False, default=30.0)
     _repetitions: int = field(init=False, repr=False, compare=False, default=1)
+    _cycles: int = field(init=False, repr=False, compare=False, default=1)
     _file_number: int = field(init=False, repr=False, compare=False, default=1)
     _scan: str = field(init=False, repr=False, compare=False, default="A")
     _load: float = field(init=False, repr=False, compare=False, default=0.0)
     _temperature: float = field(init=False, repr=False, compare=False, default=0.0)
+    _vpp: float = field(init=False, repr=False, compare=False, default=0.0)
 
     def __post_init__(self) -> None:
         object.__setattr__(self, "_scan", self.settings.value("scan", type=str))
@@ -63,6 +65,12 @@ class ExperimentModel:
             repetitions_value = 1
         object.__setattr__(self, "_repetitions", repetitions_value)
 
+        # Set cycles value
+        cycles_value = self.settings.value("cycles", type=int)
+        if cycles_value is None:
+            cycles_value = 1
+        object.__setattr__(self, "_cycles", cycles_value)
+
         # Set file number value
         file_number_value = self.settings.value("file_number", type=int)
         if file_number_value is None:
@@ -81,16 +89,24 @@ class ExperimentModel:
             temperature_value = 0.0
         object.__setattr__(self, "_temperature", temperature_value)
 
+        # Set vpp value
+        vpp_value = float(self.settings.value("vpp", type=float))
+        if vpp_value is None:
+            vpp_value = 0.0
+        object.__setattr__(self, "_vpp", vpp_value)
+
     def set_experiment_defaults(self) -> None:
         """Sets the default values for the experiment section."""
         object.__setattr__(self, "_frequencies", [20.0, 30.0, 40.0, 50.0, 60.0])
         object.__setattr__(self, "_threshold", 27)
         object.__setattr__(self, "_reset_frequency", 30)
         object.__setattr__(self, "_repetitions", 1)
+        object.__setattr__(self, "_cycles", 1)
         object.__setattr__(self, "_file_number", 1)
         object.__setattr__(self, "_scan", "A")
         object.__setattr__(self, "_load", 1)
         object.__setattr__(self, "_temperature", 1)
+        object.__setattr__(self, "vpp", 2.0)
 
     def _convert_array(self) -> list[float]:
         """Converts the saved array to list[float]."""
@@ -118,6 +134,10 @@ class ExperimentModel:
         return self._repetitions
 
     @property
+    def cycles(self) -> int:
+        return self._cycles
+
+    @property
     def file_number(self) -> int:
         return self._file_number
 
@@ -132,6 +152,10 @@ class ExperimentModel:
     @property
     def temperature(self) -> float:
         return self._temperature
+
+    @property
+    def vpp(self) -> float:
+        return self._vpp
 
     @frequencies.setter
     def frequencies(self, value) -> None:
@@ -157,6 +181,12 @@ class ExperimentModel:
             object.__setattr__(self, "_repetitions", value)
             self.settings.setValue("repetitions", self._repetitions)
 
+    @cycles.setter
+    def cycles(self, value) -> None:
+        if isinstance(value, int):
+            object.__setattr__(self, "_cycles", value)
+            self.settings.setValue("cycles", self._cycles)
+
     @file_number.setter
     def file_number(self, value) -> None:
         if isinstance(value, int):
@@ -180,3 +210,9 @@ class ExperimentModel:
         if isinstance(value, float):
             object.__setattr__(self, "_temperature", value)
             self.settings.setValue("temperature", self._temperature)
+
+    @vpp.setter
+    def vpp(self, value) -> None:
+        if isinstance(value, float):
+            object.__setattr__(self, "_vpp", value)
+            self.settings.setValue("vpp", self._vpp)

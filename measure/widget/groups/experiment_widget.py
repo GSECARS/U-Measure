@@ -50,16 +50,16 @@ class ExperimentWidget(QGroupBox):
         self._lbl_repetitions = QLabel("Repetitions")
         self._lbl_scan = QLabel("Scan")
         self._lbl_file_number = QLabel("#File")
-        self._lbl_load = QLabel("Load (tons)")
-        self._lbl_temperature = QLabel("Temperature (K)")
+        self._lbl_cycles = QLabel("Cycles")
+        self._lbl_vpp = QLabel("Vpp")
         self.txt_frequencies = QLineEdit()
         self.txt_threshold = QLineEdit()
         self.txt_reset = QLineEdit()
         self.txt_scan = QLineEdit()
         self.spin_repetitions = QSpinBox()
+        self.spin_cycles = QSpinBox()
         self.spin_file_number = QSpinBox()
-        self.spin_load = QDoubleSpinBox()
-        self.spin_temperature = QDoubleSpinBox()
+        self.spin_vpp = QDoubleSpinBox()
 
         # List of experiment group's widgets
         self._experiment_widgets = [
@@ -69,16 +69,16 @@ class ExperimentWidget(QGroupBox):
             self._lbl_repetitions,
             self._lbl_scan,
             self._lbl_file_number,
-            self._lbl_load,
-            self._lbl_temperature,
+            self._lbl_cycles,
+            self._lbl_vpp,
             self.txt_frequencies,
             self.txt_threshold,
             self.txt_reset,
             self.txt_scan,
             self.spin_repetitions,
+            self.spin_cycles,
             self.spin_file_number,
-            self.spin_load,
-            self.spin_temperature,
+            self.spin_vpp,
         ]
 
         # Run experiment group's widget methods
@@ -113,8 +113,8 @@ class ExperimentWidget(QGroupBox):
             self._lbl_repetitions,
             self._lbl_scan,
             self._lbl_file_number,
-            self._lbl_load,
-            self._lbl_temperature,
+            self._lbl_cycles,
+            self._lbl_vpp,
         ]
         [label.setObjectName("lbl-experiment") for label in labels]
 
@@ -149,9 +149,8 @@ class ExperimentWidget(QGroupBox):
         """Configuration of the experiment group's spin boxes."""
         spin_boxes = [
             self.spin_repetitions,
+            self.spin_cycles,
             self.spin_file_number,
-            self.spin_load,
-            self.spin_temperature,
         ]
         for spin_box in spin_boxes:
             spin_box.setObjectName("spin-experiment")
@@ -162,19 +161,21 @@ class ExperimentWidget(QGroupBox):
         self.spin_repetitions.setMaximum(10000)
         self.spin_repetitions.setSingleStep(1)
 
+        self.spin_cycles.setMinimum(1)
+        self.spin_cycles.setMaximum(10)
+        self.spin_cycles.setSingleStep(1)
+
         self.spin_file_number.setMinimum(1)
         self.spin_file_number.setMaximum(100000)
         self.spin_file_number.setSingleStep(10)
 
-        self.spin_load.setMinimum(0.0)
-        self.spin_load.setMaximum(900.0)
-        self.spin_load.setSingleStep(10.0)
-        self.spin_load.setDecimals(1)
-
-        self.spin_temperature.setMinimum(0.0)
-        self.spin_temperature.setMaximum(3000.0)
-        self.spin_temperature.setSingleStep(100.0)
-        self.spin_temperature.setDecimals(1)
+        self.spin_vpp.setObjectName("spin-vpp")
+        self.spin_vpp.setMinimum(0.0)
+        self.spin_vpp.setMaximum(5.0)
+        self.spin_vpp.setSingleStep(0.1)
+        self.spin_vpp.setDecimals(1)
+        self.spin_vpp.setAlignment(Qt.AlignCenter)
+        self.spin_vpp.setButtonSymbols(QAbstractSpinBox.NoButtons)
 
     def _layout_experiment_widgets(self) -> None:
         """Sets the layout for the experiment group widgets."""
@@ -196,10 +197,10 @@ class ExperimentWidget(QGroupBox):
         # layout for load and temperature
         load_temperature_layout = QHBoxLayout()
         load_temperature_layout.setContentsMargins(0, 0, 0, 0)
-        load_temperature_layout.addWidget(self._lbl_load)
-        load_temperature_layout.addWidget(self.spin_load)
-        load_temperature_layout.addWidget(self._lbl_temperature)
-        load_temperature_layout.addWidget(self.spin_temperature)
+        load_temperature_layout.addWidget(self._lbl_cycles)
+        load_temperature_layout.addWidget(self.spin_cycles)
+        load_temperature_layout.addWidget(self._lbl_vpp)
+        load_temperature_layout.addWidget(self.spin_vpp)
         load_temperature_layout.addWidget(self._lbl_repetitions)
         load_temperature_layout.addWidget(self.spin_repetitions)
         load_temperature_layout.addStretch(1)

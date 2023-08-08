@@ -47,37 +47,29 @@ class SetupWidget(QGroupBox):
         # Initialize setup group's widgets
         self._lbl_mso = QLabel("MSO")
         self._lbl_afg = QLabel("AFG")
-        self._lbl_hutch = QLabel("Hutch")
-        self._lbl_cycle = QLabel("Cycle")
-        self._lbl_institution = QLabel("Institution")
-        self._lbl_run_number = QLabel("#Run")
-        self._lbl_vpp = QLabel("Vpp")
+        self._lbl_target = QLabel("Path")
+        self._lbl_prefix = QLabel("Prefix")
+        self._lbl_filename = QLabel("Filename")
         self.lbl_path = QLabel()
         self.txt_mso = QLineEdit()
         self.txt_afg = QLineEdit()
-        self.txt_hutch = QLineEdit()
-        self.txt_cycle = QLineEdit()
-        self.txt_institution = QLineEdit()
-        self.txt_run_number = QLineEdit()
-        self.spin_vpp = QDoubleSpinBox()
+        self.txt_target = QLineEdit()
+        self.txt_prefix = QLineEdit()
+        self.txt_filename = QLineEdit()
         self.btn_reset = QPushButton("Reset")
 
         # List of setup group's widgets
         self._setup_widgets = [
             self._lbl_mso,
             self._lbl_afg,
-            self._lbl_hutch,
-            self._lbl_cycle,
-            self._lbl_institution,
-            self._lbl_run_number,
-            self._lbl_vpp,
+            self._lbl_target,
+            self._lbl_prefix,
+            self._lbl_filename,
             self.txt_mso,
             self.txt_afg,
-            self.txt_hutch,
-            self.txt_cycle,
-            self.txt_institution,
-            self.txt_run_number,
-            self.spin_vpp,
+            self.txt_target,
+            self.txt_prefix,
+            self.txt_filename,
             self.btn_reset,
         ]
 
@@ -85,7 +77,6 @@ class SetupWidget(QGroupBox):
         self._configure_setup_group()
         self._configure_setup_labels()
         self._configure_setup_text_boxes()
-        self._configure_setup_spin_boxes()
         self._configure_setup_buttons()
         self._connect_setup_widgets()
         self._layout_setup_widgets()
@@ -111,11 +102,9 @@ class SetupWidget(QGroupBox):
         labels = [
             self._lbl_mso,
             self._lbl_afg,
-            self._lbl_hutch,
-            self._lbl_cycle,
-            self._lbl_institution,
-            self._lbl_run_number,
-            self._lbl_vpp,
+            self._lbl_target,
+            self._lbl_prefix,
+            self._lbl_filename,
             self.lbl_path,
         ]
         [label.setObjectName("lbl-setup") for label in labels]
@@ -126,10 +115,9 @@ class SetupWidget(QGroupBox):
         txt_boxes = [
             self.txt_mso,
             self.txt_afg,
-            self.txt_hutch,
-            self.txt_cycle,
-            self.txt_institution,
-            self.txt_run_number,
+            self.txt_target,
+            self.txt_prefix,
+            self.txt_filename,
         ]
         [txt_box.setObjectName("txt-setup") for txt_box in txt_boxes]
 
@@ -142,20 +130,9 @@ class SetupWidget(QGroupBox):
         # Alignment
         self.txt_mso.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)
         self.txt_afg.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)
-        self.txt_hutch.setAlignment(Qt.AlignHCenter | Qt.AlignVCenter)
-        self.txt_cycle.setAlignment(Qt.AlignHCenter | Qt.AlignVCenter)
-        self.txt_institution.setAlignment(Qt.AlignHCenter | Qt.AlignVCenter)
-        self.txt_run_number.setAlignment(Qt.AlignHCenter | Qt.AlignVCenter)
-
-    def _configure_setup_spin_boxes(self) -> None:
-        """Configuration of the setup group's spin boxes."""
-        self.spin_vpp.setObjectName("spin-vpp")
-        self.spin_vpp.setMinimum(0.0)
-        self.spin_vpp.setMaximum(5.0)
-        self.spin_vpp.setSingleStep(0.1)
-        self.spin_vpp.setDecimals(1)
-        self.spin_vpp.setAlignment(Qt.AlignCenter)
-        self.spin_vpp.setButtonSymbols(QAbstractSpinBox.NoButtons)
+        self.txt_target.setAlignment(Qt.AlignHCenter | Qt.AlignVCenter)
+        self.txt_prefix.setAlignment(Qt.AlignHCenter | Qt.AlignVCenter)
+        self.txt_filename.setAlignment(Qt.AlignHCenter | Qt.AlignVCenter)
 
     def _configure_setup_buttons(self) -> None:
         """Configuration of the setup group's buttons."""
@@ -171,17 +148,14 @@ class SetupWidget(QGroupBox):
         self.txt_afg.returnPressed.connect(
             lambda: self._txt_return_pressed(self.txt_afg)
         )
-        self.txt_hutch.returnPressed.connect(
-            lambda: self._txt_return_pressed(self.txt_hutch)
+        self.txt_target.returnPressed.connect(
+            lambda: self._txt_return_pressed(self.txt_target)
         )
-        self.txt_cycle.returnPressed.connect(
-            lambda: self._txt_return_pressed(self.txt_cycle)
+        self.txt_prefix.returnPressed.connect(
+            lambda: self._txt_return_pressed(self.txt_prefix)
         )
-        self.txt_institution.returnPressed.connect(
-            lambda: self._txt_return_pressed(self.txt_institution)
-        )
-        self.txt_run_number.returnPressed.connect(
-            lambda: self._txt_return_pressed(self.txt_run_number)
+        self.txt_filename.returnPressed.connect(
+            lambda: self._txt_return_pressed(self.txt_filename)
         )
 
     @staticmethod
@@ -214,16 +188,12 @@ class SetupWidget(QGroupBox):
         # layout for cycle, #run and vpp widgets
         run_vpp_layout = QHBoxLayout()
         run_vpp_layout.setContentsMargins(0, 0, 0, 0)
-        run_vpp_layout.addWidget(self._lbl_hutch)
-        run_vpp_layout.addWidget(self.txt_hutch)
-        run_vpp_layout.addWidget(self._lbl_cycle)
-        run_vpp_layout.addWidget(self.txt_cycle)
-        run_vpp_layout.addWidget(self._lbl_institution)
-        run_vpp_layout.addWidget(self.txt_institution)
-        run_vpp_layout.addWidget(self._lbl_run_number)
-        run_vpp_layout.addWidget(self.txt_run_number)
-        run_vpp_layout.addWidget(self._lbl_vpp)
-        run_vpp_layout.addWidget(self.spin_vpp)
+        run_vpp_layout.addWidget(self._lbl_target)
+        run_vpp_layout.addWidget(self.txt_target)
+        run_vpp_layout.addWidget(self._lbl_prefix)
+        run_vpp_layout.addWidget(self.txt_prefix)
+        run_vpp_layout.addWidget(self._lbl_filename)
+        run_vpp_layout.addWidget(self.txt_filename)
         run_vpp_layout.addStretch(1)
         setup_layout.addLayout(run_vpp_layout, 2, 0, 1, 4)
 
