@@ -1,14 +1,13 @@
-#!usr/bin/python
 ##############################################################################################
-# File Name: setup.py
-# Description: This file is used to install the U-Measure software.
+# File Name: .gitattributes 
+# Description: This file is used to export the version number to the _version.py file 
 #
 # Attribution:
 # - This file is part of the U-Measure project.
 #
 # License: GPL-3.0
 #
-# U-Measure
+# U-Measure 
 #
 # Copyright (c) 2023 Christofanis Skordas
 # Copyright (c) 2023 GSECARS, The University of Chicago
@@ -27,12 +26,4 @@
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 ##############################################################################################
 
-import versioneer
-from setuptools import setup
-
-
-if __name__ == "__main__":
-    setup(
-        version=versioneer.get_version(),
-        cmdclass=versioneer.get_cmdclass(),
-    )
+umeasure/_version.py export-subst

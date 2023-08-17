@@ -1,7 +1,7 @@
 #!usr/bin/python
 ##############################################################################################
-# File Name: setup.py
-# Description: This file is used to install the U-Measure software.
+# File Name: __init__.py
+# Description: This file is used for the umeasure widget groups package.
 #
 # Attribution:
 # - This file is part of the U-Measure project.
@@ -27,12 +27,7 @@
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 ##############################################################################################
 
-import versioneer
-from setuptools import setup
-
-
-if __name__ == "__main__":
-    setup(
-        version=versioneer.get_version(),
-        cmdclass=versioneer.get_cmdclass(),
-    )
+from umeasure.widget.groups.setup_widget import SetupWidget
+from umeasure.widget.groups.experiment_widget import ExperimentWidget
+from umeasure.widget.groups.control_status_widget import ControlStatusWidget
+from umeasure.widget.groups.main_group_widget import MainGroupWidget

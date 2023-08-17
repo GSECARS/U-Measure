@@ -1,14 +1,13 @@
-#!usr/bin/python
 ##############################################################################################
-# File Name: setup.py
-# Description: This file is used to install the U-Measure software.
+# File Name: pyproject.toml 
+# Description: This file is used to configure the U-Measure project and its dependencies. 
 #
 # Attribution:
 # - This file is part of the U-Measure project.
 #
 # License: GPL-3.0
 #
-# U-Measure
+# U-Measure 
 #
 # Copyright (c) 2023 Christofanis Skordas
 # Copyright (c) 2023 GSECARS, The University of Chicago
@@ -27,12 +26,29 @@
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 ##############################################################################################
 
-import versioneer
-from setuptools import setup
+# This section specifies the build system used by the project.
+# The `requires` key lists the dependencies required by the build system.
+# In this case, we require setuptools, versioneer, and wheel.
+[build-system]
+requires = [
+    "setuptools>=65.5",
+    "versioneer-518",
+    "wheel"
+]
+build-backend = "setuptools.build_meta"
 
-
-if __name__ == "__main__":
-    setup(
-        version=versioneer.get_version(),
-        cmdclass=versioneer.get_cmdclass(),
-    )
+# This section specifies the configuration for the mypy static type checker.
+# The options below configure mypy to check for various type-related issues.
+[tool.mypy]
+mypy_path = "umeasure"
+check_untyped_defs = true
+disallow_any_generics = true
+ignore_missing_imports = true
+no_implicit_optional = true
+show_error_codes = true
+strict_equality = true
+warn_redundant_casts = true
+warn_return_any = true
+warn_unreachable = true
+warn_unused_configs = true
+no_implicit_reexport = true

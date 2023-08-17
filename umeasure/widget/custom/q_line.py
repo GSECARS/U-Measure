@@ -1,7 +1,7 @@
 #!usr/bin/python
 ##############################################################################################
-# File Name: setup.py
-# Description: This file is used to install the U-Measure software.
+# File Name: q_line.py
+# Description: This file contains the custom vertical/horizontal line widget.
 #
 # Attribution:
 # - This file is part of the U-Measure project.
@@ -27,12 +27,22 @@
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 ##############################################################################################
 
-import versioneer
-from setuptools import setup
+from qtpy.QtWidgets import QFrame
+from typing import Optional
 
 
-if __name__ == "__main__":
-    setup(
-        version=versioneer.get_version(),
-        cmdclass=versioneer.get_cmdclass(),
-    )
+class QLine(QFrame):
+    """Custom vertical/horizontal line widget to expand to the available space."""
+
+    def __init__(self, vertical: Optional[bool] = True) -> None:
+        super(QLine, self).__init__()
+
+        self._vertical = vertical
+        self._set_orientation()
+
+    def _set_orientation(self) -> None:
+        """Sets the orientation of the line to vertical or horizontal."""
+        if self._vertical:
+            self.setFrameShape(QFrame.Shape.VLine)
+        else:
+            self.setFrameShape(QFrame.Shape.HLine)

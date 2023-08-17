@@ -1,7 +1,7 @@
 #!usr/bin/python
 ##############################################################################################
-# File Name: setup.py
-# Description: This file is used to install the U-Measure software.
+# File Name: main_group_widget.py
+# Description: This file contains the main group widget.
 #
 # Attribution:
 # - This file is part of the U-Measure project.
@@ -27,12 +27,29 @@
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 ##############################################################################################
 
-import versioneer
-from setuptools import setup
+from qtpy.QtWidgets import QWidget, QGridLayout
+
+from umeasure.widget.groups import SetupWidget, ExperimentWidget, ControlStatusWidget
 
 
-if __name__ == "__main__":
-    setup(
-        version=versioneer.get_version(),
-        cmdclass=versioneer.get_cmdclass(),
-    )
+class MainGroupWidget(QWidget):
+    """Custom widget to hold all the groupboxes."""
+
+    def __init__(self) -> None:
+        super(MainGroupWidget, self).__init__()
+
+        self.setup = SetupWidget()
+        self.experiment = ExperimentWidget()
+        self.control_status = ControlStatusWidget()
+
+        self._layout_widgets()
+
+    def _layout_widgets(self) -> None:
+        """Sets the layout for the main group widgets."""
+        main_layout = QGridLayout()
+        main_layout.setRowStretch(2, 1)
+        main_layout.addWidget(self.setup, 0, 0, 1, 1)
+        main_layout.addWidget(self.experiment, 1, 0, 1, 1)
+        main_layout.addWidget(self.control_status, 2, 0, 1, 1)
+
+        self.setLayout(main_layout)

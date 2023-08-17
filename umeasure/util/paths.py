@@ -1,7 +1,7 @@
 #!usr/bin/python
 ##############################################################################################
-# File Name: setup.py
-# Description: This file is used to install the U-Measure software.
+# File Name: paths.py
+# Description: This file contains the paths for the assets.
 #
 # Attribution:
 # - This file is part of the U-Measure project.
@@ -27,12 +27,8 @@
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 ##############################################################################################
 
-import versioneer
-from setuptools import setup
+import os
 
-
-if __name__ == "__main__":
-    setup(
-        version=versioneer.get_version(),
-        cmdclass=versioneer.get_cmdclass(),
-    )
+assets_path = os.path.join(os.getcwd(), "umeasure/assets")
+qss_path = os.path.join(assets_path, "qss")
+icon_path = os.path.join(assets_path, "icons")

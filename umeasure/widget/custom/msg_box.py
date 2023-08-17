@@ -1,7 +1,7 @@
 #!usr/bin/python
 ##############################################################################################
-# File Name: setup.py
-# Description: This file is used to install the U-Measure software.
+# File Name: msg_box.py
+# Description: This file contains the custom popup message box widget.
 #
 # Attribution:
 # - This file is part of the U-Measure project.
@@ -27,12 +27,12 @@
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 ##############################################################################################
 
-import versioneer
-from setuptools import setup
+from qtpy.QtWidgets import QMessageBox
 
 
-if __name__ == "__main__":
-    setup(
-        version=versioneer.get_version(),
-        cmdclass=versioneer.get_cmdclass(),
-    )
+class MsgBox(QMessageBox):
+    """Custom popup message box widget to expand to the available space."""
+
+    def __init__(self, msg: str):
+        super(MsgBox, self).__init__()
+        self.critical(self, "Error", msg, QMessageBox.Ok)

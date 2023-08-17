@@ -1,7 +1,7 @@
 #!usr/bin/python
 ##############################################################################################
-# File Name: setup.py
-# Description: This file is used to install the U-Measure software.
+# File Name: gui_worker.py
+# Description: This file contains the worker class that's been used for threading.
 #
 # Attribution:
 # - This file is part of the U-Measure project.
@@ -27,12 +27,20 @@
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 ##############################################################################################
 
-import versioneer
-from setuptools import setup
+from qtpy.QtCore import QThread
+from typing import Any, Callable
 
 
-if __name__ == "__main__":
-    setup(
-        version=versioneer.get_version(),
-        cmdclass=versioneer.get_cmdclass(),
-    )
+class GUIWorker(QThread):
+    """
+    The worker class that's been used for threading.
+    """
+
+    def __init__(self, method: Callable, args: Any) -> None:
+        super(GUIWorker, self).__init__()
+
+        self._method = method
+        self._args = args
+
+    def run(self) -> None:
+        self._method(*self._args)

@@ -1,7 +1,7 @@
 #!usr/bin/python
 ##############################################################################################
-# File Name: setup.py
-# Description: This file is used to install the U-Measure software.
+# File Name: __init__.py
+# Description: This is used for the umeasure model package.
 #
 # Attribution:
 # - This file is part of the U-Measure project.
@@ -27,12 +27,7 @@
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 ##############################################################################################
 
-import versioneer
-from setuptools import setup
+from umeasure.model.setup_model import SetupModel
+from umeasure.model.experiment_model import ExperimentModel
 
-
-if __name__ == "__main__":
-    setup(
-        version=versioneer.get_version(),
-        cmdclass=versioneer.get_cmdclass(),
-    )
+__all__ = ["SetupModel", "ExperimentModel"]

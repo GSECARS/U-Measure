@@ -1,7 +1,7 @@
 #!usr/bin/python
 ##############################################################################################
-# File Name: setup.py
-# Description: This file is used to install the U-Measure software.
+# File Name: __init__.py
+# Description: This file is used for the umeasure package.
 #
 # Attribution:
 # - This file is part of the U-Measure project.
@@ -27,12 +27,13 @@
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 ##############################################################################################
 
-import versioneer
-from setuptools import setup
+from umeasure import _version
+from umeasure.controller import MainController
 
+__all__ = ["app", "__version__"]
 
-if __name__ == "__main__":
-    setup(
-        version=versioneer.get_version(),
-        cmdclass=versioneer.get_cmdclass(),
-    )
+# Version number based on git tags
+__version__ = _version.get_versions()["version"]
+
+# Application controller
+app = MainController()

@@ -1,7 +1,8 @@
-#!usr/bin/python
+#!/usr/bin/python
 ##############################################################################################
-# File Name: setup.py
-# Description: This file is used to install the U-Measure software.
+# File Name: U-Measure.py
+# Description: This is the main file of the U-Measure project. It is used to run the U-Measure
+#              application.
 #
 # Attribution:
 # - This file is part of the U-Measure project.
@@ -27,12 +28,8 @@
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 ##############################################################################################
 
-import versioneer
-from setuptools import setup
+from umeasure import app, __version__
 
 
 if __name__ == "__main__":
-    setup(
-        version=versioneer.get_version(),
-        cmdclass=versioneer.get_cmdclass(),
-    )
+    app.run(version=__version__)
