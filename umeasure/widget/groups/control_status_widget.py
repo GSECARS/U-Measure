@@ -39,17 +39,17 @@ from qtpy.QtWidgets import (
 )
 from qtpy.QtCore import Qt
 
-from umeasure.util import qss_path
+from umeasure.model import PathModel
 from umeasure.widget.custom import QLine
 
 
 class ControlStatusWidget(QGroupBox):
     """Control and status widget groupbox to be used in the MainWidget."""
 
-    _qss = os.path.join(qss_path, "control_status_group.qss")
-
-    def __init__(self) -> None:
+    def __init__(self, paths: PathModel) -> None:
         super(ControlStatusWidget, self).__init__()
+
+        self._paths = paths
 
         # Initialize control group's widgets
         self._lbl_elapsed = QLabel("Elapsed time")
@@ -74,7 +74,7 @@ class ControlStatusWidget(QGroupBox):
         self.setObjectName("group-control-status")
 
         # Set the stylesheet from assets/qss/control_status_group.qss
-        self.setStyleSheet(open(self._qss, "r").read())
+        self.setStyleSheet(open(os.path.join(self._paths.qss_path, "control_status_group.qss"), "r").read())
 
     def _configure_control_status_labels(self) -> None:
         """Configuration of the control group's labels."""

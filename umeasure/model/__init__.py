@@ -27,7 +27,14 @@
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 ##############################################################################################
 
+from umeasure.model.path_model import PathModel
 from umeasure.model.setup_model import SetupModel
 from umeasure.model.experiment_model import ExperimentModel
+from umeasure.model.main_model import MainModel
 
-__all__ = ["SetupModel", "ExperimentModel"]
+__all__ = [
+    "PathModel",
+    "SetupModel",
+    "ExperimentModel",
+    "MainModel"
+]

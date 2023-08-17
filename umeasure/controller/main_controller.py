@@ -32,6 +32,7 @@ import sys
 from qtpy.QtWidgets import QApplication, QMessageBox
 from qtpy.QtCore import QSettings, QObject, Signal, QTimer
 
+from umeasure.model import MainModel
 from umeasure.widget import MainWidget
 from umeasure.widget.custom import MsgBox
 from umeasure.util import GUIWorker
@@ -48,8 +49,9 @@ class MainController(QObject):
     def __init__(self) -> None:
         super(MainController, self).__init__()
         self._app = QApplication(sys.argv)
+        self._model = MainModel()
         self._settings = QSettings("GSECARS", "U-Measure")
-        self._widget = MainWidget(settings=self._settings)
+        self._widget = MainWidget(paths=self._model.paths, settings=self._settings)
 
         # Setup controller
         self._setup_controller = SetupController(

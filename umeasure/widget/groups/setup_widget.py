@@ -43,15 +43,16 @@ from qtpy.QtWidgets import (
 from qtpy.QtCore import Qt, QRegularExpression
 from qtpy.QtGui import QRegularExpressionValidator
 
-from umeasure.util import qss_path
+from umeasure.model import PathModel
+
 
 class SetupWidget(QGroupBox):
     """Setup widget groupbox to be used in the MainWidget."""
 
-    _qss = os.path.join(qss_path, "setup_group.qss")
-
-    def __init__(self) -> None:
+    def __init__(self, paths: PathModel) -> None:
         super(SetupWidget, self).__init__()
+
+        self._paths = paths
 
         # Initialize setup group's widgets
         self._lbl_mso = QLabel("MSO")
@@ -105,7 +106,7 @@ class SetupWidget(QGroupBox):
         self.setObjectName("group-setup")
 
         # Set the stylesheet from assets/qss/setup_group.qss
-        self.setStyleSheet(open(self._qss, "r").read())
+        self.setStyleSheet(open(os.path.join(self._paths.qss_path, "setup_group.qss"), "r").read())
 
     def _configure_setup_labels(self) -> None:
         """Configuration of the setup group's labels."""

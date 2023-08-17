@@ -41,16 +41,17 @@ from qtpy.QtWidgets import (
 from qtpy.QtCore import Qt, QRegularExpression
 from qtpy.QtGui import QRegularExpressionValidator
 
-from umeasure.util import qss_path
+from umeasure.model import PathModel
 
 
 class ExperimentWidget(QGroupBox):
     """Experiment widget groupbox to be used in the MainWidget."""
 
-    _qss = os.path.join(qss_path, "experiment_group.qss")
 
-    def __init__(self) -> None:
+    def __init__(self, paths: PathModel) -> None:
         super(ExperimentWidget, self).__init__()
+
+        self._paths = paths
 
         # Initialize experiment group's widgets
         self._lbl_frequencies = QLabel("Frequencies")
@@ -107,7 +108,7 @@ class ExperimentWidget(QGroupBox):
         self.setObjectName("group-experiment")
 
         # Set the stylesheet from assets/qss/experiment_group.qss
-        self.setStyleSheet(open(self._qss, "r").read())
+        self.setStyleSheet(open(os.path.join(self._paths.qss_path, "experiment_group.qss"), "r").read())
 
     def _configure_experiment_labels(self) -> None:
         """Configuration of the experiment group's labels."""

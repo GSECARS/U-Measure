@@ -33,22 +33,23 @@ from qtpy.QtWidgets import QWidget, QMessageBox, QHBoxLayout
 from qtpy.QtGui import QCloseEvent, QIcon
 from qtpy.QtCore import QSettings, QSize, QPoint
 
+from umeasure.model import PathModel
 from umeasure.widget.groups import MainGroupWidget
-from umeasure.util import qss_path, icon_path
 
 
 class MainWidget(QWidget):
     """This is used as the main application window."""
 
-    _icon: str = os.path.join(icon_path, "ultrasonic_icon.ico")
-    _qss: str = os.path.join(qss_path, "main_widget.qss")
     _title: str = "U-Measure"
 
-    def __init__(self, settings: QSettings) -> None:
+    def __init__(self, paths: PathModel, settings: QSettings) -> None:
         super(MainWidget, self).__init__()
 
+        # Paths
+        self._paths = paths
+
         self._settings = settings
-        self.group_widget = MainGroupWidget()
+        self.group_widget = MainGroupWidget(paths=self._paths)
 
         # Event helpers
         self._terminated: bool = False
@@ -63,10 +64,10 @@ class MainWidget(QWidget):
         self.setObjectName("main-widget")
 
         # Sets the application icon
-        self.setWindowIcon(QIcon(self._icon))
+        self.setWindowIcon(QIcon(os.path.join(self._paths.icon_path, "ultrasonic_icon.ico")))
 
         # Sets the stylesheet from /assets/qss/main_widget.qss
-        self.setStyleSheet(open(self._qss, "r").read())
+        self.setStyleSheet(open(os.path.join(self._paths.qss_path, "main_widget.qss"), "r").read())
 
     def _layout_main_widget(self) -> None:
         """Sets the layout for the main application widgets."""

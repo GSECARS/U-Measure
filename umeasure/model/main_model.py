@@ -1,7 +1,8 @@
-#!usr/bin/python
+#!/usr/bin/python
 ##############################################################################################
-# File Name: __init__.py
-# Description: This file is used for the umeasure util package.
+# File Name: main_model.py
+# Description: This is the main model file of the U-Measure project. It is used to create the
+#              collection of all the necessary models needed to run the U-Measure application. 
 #
 # Attribution:
 # - This file is part of the U-Measure project.
@@ -27,6 +28,22 @@
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 ##############################################################################################
 
-from umeasure.util.gui_worker import GUIWorker
+from dataclasses import dataclass, field
 
-__all__ = ["GUIWorker"]
+from umeasure.model import PathModel
+
+
+@dataclass
+class MainModel:
+    """This is used as the main application model."""
+    
+    _paths: PathModel = field(init=False, repr=False, compare=False)
+
+    def __post_init__(self) -> None:
+        """This is used after the initialization of the main application model."""
+        object.__setattr__(self, "_paths", PathModel())
+    
+    @property
+    def paths(self) -> PathModel:
+        """Returns the paths model."""
+        return self._paths

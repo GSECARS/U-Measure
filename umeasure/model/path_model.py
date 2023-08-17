@@ -1,6 +1,6 @@
 #!usr/bin/python
 ##############################################################################################
-# File Name: paths.py
+# File Name: path_model.py
 # Description: This file contains the paths for the assets.
 #
 # Attribution:
@@ -27,8 +27,31 @@
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 ##############################################################################################
 
-import os
+from dataclasses import dataclass, field
+from pathlib import Path, PurePosixPath
 
-assets_path = os.path.join(os.getcwd(), "umeasure/assets")
-qss_path = os.path.join(assets_path, "qss")
-icon_path = os.path.join(assets_path, "icons")
+
+@dataclass(frozen=True)
+class PathModel:
+    """
+    Model that holds the paths for the assets directories.
+    """
+
+    _assets_path: str = field(init=False, compare=False, repr=False)
+    _icon_path: str = field(init=False, compare=False, repr=False)
+    _qss_path: str = field(init=False, compare=False, repr=False)
+
+    def __post_init__(self) -> None:
+        object.__setattr__(
+            self, "_assets_path", Path("umeasure/assets").absolute().as_posix()
+        )
+        object.__setattr__(self, "_icon_path", PurePosixPath(self._assets_path).joinpath("icons").as_posix())
+        object.__setattr__(self, "_qss_path", PurePosixPath(self._assets_path).joinpath("qss").as_posix())
+
+    @property
+    def icon_path(self) -> str:
+        return self._icon_path
+
+    @property
+    def qss_path(self) -> str:
+        return self._qss_path
