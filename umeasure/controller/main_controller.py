@@ -294,10 +294,15 @@ class MainController(QObject):
         )
 
     def run(self, version: str) -> None:
-        """Starts the application."""
-        self._widget.display(
+        """Runs the main application window."""
+
+        # Display the main application window
+        self._widget.display_window(
             version=version,
-            window_size=self._settings.value("window_size"),
-            window_position=self._settings.value("window_position"),
+            window_size=self._model.settings.sizing.window_size,
+            window_position=self._model.settings.sizing.window_position,
+            window_state=self._model.settings.sizing.window_state,
         )
+        
+        # Set the application exit code
         sys.exit(self._app.exec())

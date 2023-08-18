@@ -1,7 +1,7 @@
 #!usr/bin/python
 ##############################################################################################
-# File Name: __init__.py
-# Description: This is used for the umeasure model package.
+# File Name: sizing_settings_model.py 
+# Description: This file is used for the sizing settings model.
 #
 # Attribution:
 # - This file is part of the U-Measure project.
@@ -27,16 +27,25 @@
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 ##############################################################################################
 
-from umeasure.model.settings.settings_model import SettingsModel
-from umeasure.model.path_model import PathModel
-from umeasure.model.setup_model import SetupModel
-from umeasure.model.experiment_model import ExperimentModel
-from umeasure.model.main_model import MainModel
+from dataclasses import dataclass, field
+from qtpy.QtCore import QSettings
 
-__all__ = [
-    "SettingsModel",
-    "PathModel",
-    "SetupModel",
-    "ExperimentModel",
-    "MainModel"
-]
+from umeasure.model.settings import SizingSettingsModel
+
+
+@dataclass
+class SettingsModel:
+    """All the settings models are collected here."""
+
+    _settings: QSettings = field(init=False, repr=False, compare=False)
+    _sizing: SizingSettingsModel = field(init=False, repr=False, compare=False)
+
+    def __post_init__(self) -> None:
+        """Post-initialization method."""
+        object.__setattr__(self, "_settings", QSettings("GSECARS", "U-Measure"))
+        object.__setattr__(self, "_sizing", SizingSettingsModel(settings=self._settings))
+    
+    @property
+    def sizing(self) -> SizingSettingsModel:
+        """Returns the sizing settings model."""
+        return self._sizing

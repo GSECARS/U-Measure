@@ -30,18 +30,25 @@
 
 from dataclasses import dataclass, field
 
-from umeasure.model import PathModel
+from umeasure.model import SettingsModel, PathModel
 
 
 @dataclass
 class MainModel:
     """This is used as the main application model."""
     
+    _settings: SettingsModel = field(init=False, repr=False, compare=False)
     _paths: PathModel = field(init=False, repr=False, compare=False)
 
     def __post_init__(self) -> None:
         """This is used after the initialization of the main application model."""
+        object.__setattr__(self, "_settings", SettingsModel())
         object.__setattr__(self, "_paths", PathModel())
+
+    @property
+    def settings(self) -> SettingsModel:
+        """Returns the settings model."""
+        return self._settings
     
     @property
     def paths(self) -> PathModel:

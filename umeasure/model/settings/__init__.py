@@ -1,7 +1,7 @@
 #!usr/bin/python
 ##############################################################################################
 # File Name: __init__.py
-# Description: This is used for the umeasure model package.
+# Description: This file is used for the umeasure settings model package.
 #
 # Attribution:
 # - This file is part of the U-Measure project.
@@ -27,16 +27,8 @@
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 ##############################################################################################
 
-from umeasure.model.settings.settings_model import SettingsModel
-from umeasure.model.path_model import PathModel
-from umeasure.model.setup_model import SetupModel
-from umeasure.model.experiment_model import ExperimentModel
-from umeasure.model.main_model import MainModel
+from umeasure.model.settings.sizing_settings_model import SizingSettingsModel
 
 __all__ = [
-    "SettingsModel",
-    "PathModel",
-    "SetupModel",
-    "ExperimentModel",
-    "MainModel"
+    "SizingSettingsModel"
 ]

@@ -31,7 +31,7 @@ import os
 from typing import Optional
 from qtpy.QtWidgets import QWidget, QMessageBox, QHBoxLayout
 from qtpy.QtGui import QCloseEvent, QIcon
-from qtpy.QtCore import QSettings, QSize, QPoint
+from qtpy.QtCore import QSettings, QSize, QPoint, Qt
 
 from umeasure.model import PathModel
 from umeasure.widget.groups import MainGroupWidget
@@ -76,11 +76,12 @@ class MainWidget(QWidget):
         layout.addWidget(self.group_widget)
         self.setLayout(layout)
 
-    def display(
+    def display_window(
         self,
         version: str,
         window_size: Optional[QSize] = None,
         window_position: Optional[QPoint] = None,
+        window_state: Optional[int] = None,
     ) -> None:
         """Displays, resizes and moves the main application window."""
         # Show the main application window
@@ -96,6 +97,11 @@ class MainWidget(QWidget):
         # Move the main application on the screen
         if window_position is not None:
             self.move(window_position)
+
+        # Set the window state
+        if window_state is not None:
+            if window_state == 4:
+                self.setWindowState(Qt.WindowState.WindowMaximized)
 
     def closeEvent(self, event: QCloseEvent) -> None:
         """Creates a message box for exit confirmation if closeEvent is triggered."""
