@@ -1,7 +1,7 @@
 #!usr/bin/python
 ##############################################################################################
-# File Name: sizing_settings_model.py 
-# Description: This file is used for the sizing settings model.
+# File Name: settings_model.py 
+# Description: This file contains the settings model and the settings model collection.
 #
 # Attribution:
 # - This file is part of the U-Measure project.
