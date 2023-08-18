@@ -28,5 +28,9 @@
 ##############################################################################################
 
 from umeasure.model.settings.sizing_settings_model import SizingSettingsModel
+from umeasure.model.settings.setup_settings_model import SetupSettingsModel
 
-__all__ = ["SizingSettingsModel"]
+__all__ = [
+    "SizingSettingsModel",
+    "SetupSettingsModel",
+]

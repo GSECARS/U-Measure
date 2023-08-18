@@ -57,7 +57,7 @@ class MainController(QObject):
 
         # Setup controller
         self._setup_controller = SetupController(
-            widget=self._widget.setup, settings=self._settings
+            widget=self._widget.setup, model=self._model.settings.setup
         )
 
         # Experiment controller
@@ -67,7 +67,7 @@ class MainController(QObject):
 
         # Visa controller
         self._visa_controller = VisaController(
-            setup_model=self._setup_controller.model,
+            setup_settings=self._model.settings.setup,
             experiment_model=self._experiment_controller.model,
             basedir=self._setup_controller.basedir,
         )

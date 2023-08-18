@@ -32,7 +32,8 @@ from pyvisa import ResourceManager, VisaIOError
 from typing import Optional
 from qtpy.QtCore import QObject, Signal
 
-from umeasure.model import SetupModel, ExperimentModel
+from umeasure.model import ExperimentModel
+from umeasure.model.settings import SetupSettingsModel
 
 
 class VisaController(QObject):
@@ -43,13 +44,13 @@ class VisaController(QObject):
 
     def __init__(
         self,
-        setup_model: SetupModel,
+        setup_settings: SetupSettingsModel,
         experiment_model: ExperimentModel,
         basedir: str,
     ) -> None:
         super(VisaController, self).__init__()
 
-        self._setup_model = setup_model
+        self._setup = setup_settings
         self._experiment_model = experiment_model
         self._basedir = basedir
 
@@ -62,10 +63,10 @@ class VisaController(QObject):
         """Connects with the tek instruments."""
         try:
             self._mso_resource = self._resource_manager.open_resource(
-                f"TCPIP::{self._setup_model.mso}::INSTR"
+                f"TCPIP::{self._setup.mso}::INSTR"
             )
             self._afg_resource = self._resource_manager.open_resource(
-                f"TCPIP::{self._setup_model.afg}::INSTR"
+                f"TCPIP::{self._setup.afg}::INSTR"
             )
         except VisaIOError as error:
             self.connected = False
@@ -99,7 +100,7 @@ class VisaController(QObject):
 
         self._mso_resource.write(":save:waveform:fileformat auto")
 
-        run_number = self._setup_model.run_number
+        run_number = self._setup.run_number
         load = self._experiment_model.load
         temperature = self._experiment_model.temperature
 
@@ -122,7 +123,7 @@ class VisaController(QObject):
 
     def _send_signal(self, frequency: float, number_of_cycles: int) -> None:
         """Sends the collection commands to the afg instrument."""
-        vpp = self._setup_model.vpp
+        vpp = self._setup.vpp
 
         self._afg_resource.write(":output1:state off")
         self._afg_resource.write(":source1:burst:ncycles 1")

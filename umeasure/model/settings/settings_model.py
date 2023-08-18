@@ -30,7 +30,7 @@
 from dataclasses import dataclass, field
 from qtpy.QtCore import QSettings
 
-from umeasure.model.settings import SizingSettingsModel
+from umeasure.model.settings import SizingSettingsModel, SetupSettingsModel
 
 
 @dataclass
@@ -39,6 +39,7 @@ class SettingsModel:
 
     _settings: QSettings = field(init=False, repr=False, compare=False)
     _sizing: SizingSettingsModel = field(init=False, repr=False, compare=False)
+    _setup: SetupSettingsModel = field(init=False, repr=False, compare=False)
 
     def __post_init__(self) -> None:
         """Post-initialization method."""
@@ -46,8 +47,14 @@ class SettingsModel:
         object.__setattr__(
             self, "_sizing", SizingSettingsModel(settings=self._settings)
         )
+        object.__setattr__(self, "_setup", SetupSettingsModel(settings=self._settings))
 
     @property
     def sizing(self) -> SizingSettingsModel:
         """Returns the sizing settings model."""
         return self._sizing
+
+    @property
+    def setup(self) -> SetupSettingsModel:
+        """Returns the setup settings model."""
+        return self._setup

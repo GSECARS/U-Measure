@@ -29,7 +29,7 @@
 
 from qtpy.QtCore import QSettings
 
-from umeasure.model import SetupModel
+from umeasure.model.settings import SetupSettingsModel
 from umeasure.widget import SetupWidget
 
 
@@ -38,8 +38,8 @@ class SetupController:
 
     basedir: str = None
 
-    def __init__(self, widget: SetupWidget, settings: QSettings) -> None:
-        self.model = SetupModel(settings=settings)
+    def __init__(self, widget: SetupWidget, model: SetupSettingsModel) -> None:
+        self._model = model
         self._widget = widget
 
         self._update_setup_values()
@@ -59,42 +59,42 @@ class SetupController:
 
     def _update_setup_values(self) -> None:
         """Update the setup GUI values."""
-        self._widget.txt_mso.setText(self.model.mso)
-        self._widget.txt_afg.setText(self.model.afg)
-        self._widget.txt_cycle.setText(self.model.cycle)
-        self._widget.txt_run_number.setText(self.model.run_number)
-        self._widget.spin_vpp.setValue(self.model.vpp)
+        self._widget.txt_mso.setText(self._model.mso)
+        self._widget.txt_afg.setText(self._model.afg)
+        self._widget.txt_cycle.setText(self._model.cycle)
+        self._widget.txt_run_number.setText(self._model.run_number)
+        self._widget.spin_vpp.setValue(self._model.vpp)
 
     def _update_basedir(self) -> None:
         """Updates the current base directory and updates the GUI path label."""
         self.basedir = (
-            f"C:/Data/13BMD/{self.model.cycle}/GSECARS/{self.model.run_number}/"
+            f"C:/Data/13BMD/{self._model.cycle}/GSECARS/{self._model.run_number}/"
         )
         self._widget.lbl_path.setText(self.basedir)
 
     def _txt_mso_text_changed(self) -> None:
         """Updates the current mso IP based on user input."""
-        self.model.mso = self._widget.txt_mso.text()
+        self._model.mso = self._widget.txt_mso.text()
 
     def _txt_afg_text_changed(self) -> None:
         """Updates the current afg IP based on user input."""
-        self.model.afg = self._widget.txt_afg.text()
+        self._model.afg = self._widget.txt_afg.text()
 
     def _txt_cycle_text_changed(self) -> None:
         """Updates the current cycle value based on user input."""
-        self.model.cycle = self._widget.txt_cycle.text()
+        self._model.cycle = self._widget.txt_cycle.text()
         self._update_basedir()
 
     def _txt_run_number_text_changed(self) -> None:
         """Updates the current run number based on user input."""
-        self.model.run_number = self._widget.txt_run_number.text()
+        self._model.run_number = self._widget.txt_run_number.text()
         self._update_basedir()
 
     def _spin_vpp_value_changed(self) -> None:
         """Updates the current vpp value based on user input."""
-        self.model.vpp = self._widget.spin_vpp.value()
+        self._model.vpp = self._widget.spin_vpp.value()
 
     def _btn_reset_clicked(self) -> None:
         """Restores default values and updates the GUI."""
-        self.model.set_setup_defaults()
+        self._model.set_defaults()
         self._update_setup_values()

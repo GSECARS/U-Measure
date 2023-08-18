@@ -1,7 +1,7 @@
 #!usr/bin/python
 ##############################################################################################
-# File Name: setup_model.py
-# Description: This file contains the model for the setup section.
+# File Name: setup_settings_model.py
+# Description: This file is used for the setup settings model.
 #
 # Attribution:
 # - This file is part of the U-Measure project.
@@ -31,11 +31,11 @@ from dataclasses import dataclass, field
 from qtpy.QtCore import QSettings
 
 
-@dataclass(frozen=False, slots=True)
-class SetupModel:
-    """Dataclass that holds all necessary data information for the setup section."""
+@dataclass
+class SetupSettingsModel:
+    """U-Measure general setup settings model."""
 
-    settings: QSettings = field(init=True, repr=False, compare=False)
+    settings: QSettings = field(repr=False, compare=False)
 
     _mso: str = field(init=False, repr=False, compare=False, default="")
     _afg: str = field(init=False, repr=False, compare=False, default="")
@@ -44,6 +44,7 @@ class SetupModel:
     _vpp: float = field(init=False, repr=False, compare=False, default=0.0)
 
     def __post_init__(self) -> None:
+        """Post-initialization method."""
         object.__setattr__(self, "_mso", self.settings.value("mso", type=str))
         object.__setattr__(self, "_afg", self.settings.value("afg", type=str))
         object.__setattr__(self, "_cycle", self.settings.value("cycle", type=str))
@@ -57,8 +58,8 @@ class SetupModel:
             vpp_value = 0.0
         object.__setattr__(self, "_vpp", vpp_value)
 
-    def set_setup_defaults(self) -> None:
-        """Sets the default values for the setup section."""
+    def set_defaults(self) -> None:
+        """Sets the default values."""
         object.__setattr__(self, "mso", "164.54.160.105")
         object.__setattr__(self, "afg", "164.54.160.117")
         object.__setattr__(self, "cycle", "2022-2")
@@ -67,50 +68,55 @@ class SetupModel:
 
     @property
     def mso(self) -> str:
+        """Returns the MSO."""
         return self._mso
+
+    @mso.setter
+    def mso(self, value: str) -> None:
+        """Sets the MSO."""
+        object.__setattr__(self, "_mso", value)
+        self.settings.setValue("mso", self._mso)
 
     @property
     def afg(self) -> str:
+        """Returns the AFG."""
         return self._afg
+
+    @afg.setter
+    def afg(self, value: str) -> None:
+        """Sets the AFG."""
+        object.__setattr__(self, "_afg", value)
+        self.settings.setValue("afg", self._afg)
 
     @property
     def cycle(self) -> str:
+        """Returns the cycle."""
         return self._cycle
 
-    @property
-    def vpp(self) -> float:
-        return self._vpp
+    @cycle.setter
+    def cycle(self, value: str) -> None:
+        """Sets the cycle."""
+        object.__setattr__(self, "_cycle", value)
+        self.settings.setValue("cycle", self._cycle)
 
     @property
     def run_number(self) -> str:
+        """Returns the run number."""
         return self._run_number
 
-    @mso.setter
-    def mso(self, value) -> None:
-        if isinstance(value, str):
-            object.__setattr__(self, "_mso", value)
-            self.settings.setValue("mso", self._mso)
-
-    @afg.setter
-    def afg(self, value) -> None:
-        if isinstance(value, str):
-            object.__setattr__(self, "_afg", value)
-            self.settings.setValue("afg", self._afg)
-
-    @cycle.setter
-    def cycle(self, value) -> None:
-        if isinstance(value, str):
-            object.__setattr__(self, "_cycle", value)
-            self.settings.setValue("cycle", self._cycle)
-
     @run_number.setter
-    def run_number(self, value) -> None:
-        if isinstance(value, str):
-            object.__setattr__(self, "_run_number", value)
-            self.settings.setValue("run_number", self._run_number)
+    def run_number(self, value: str) -> None:
+        """Sets the run number."""
+        object.__setattr__(self, "_run_number", value)
+        self.settings.setValue("run_number", self._run_number)
+
+    @property
+    def vpp(self) -> float:
+        """Returns the Vpp."""
+        return self._vpp
 
     @vpp.setter
-    def vpp(self, value) -> None:
-        if isinstance(value, float):
-            object.__setattr__(self, "_vpp", value)
-            self.settings.setValue("vpp", self._vpp)
+    def vpp(self, value: float) -> None:
+        """Sets the Vpp."""
+        object.__setattr__(self, "_vpp", value)
+        self.settings.setValue("vpp", self._vpp)
