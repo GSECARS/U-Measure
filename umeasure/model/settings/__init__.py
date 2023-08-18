@@ -29,6 +29,4 @@
 
 from umeasure.model.settings.sizing_settings_model import SizingSettingsModel
 
-__all__ = [
-    "SizingSettingsModel"
-]
+__all__ = ["SizingSettingsModel"]

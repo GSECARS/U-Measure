@@ -45,8 +45,16 @@ class PathModel:
         object.__setattr__(
             self, "_assets_path", Path("umeasure/assets").absolute().as_posix()
         )
-        object.__setattr__(self, "_icon_path", PurePosixPath(self._assets_path).joinpath("icons").as_posix())
-        object.__setattr__(self, "_qss_path", PurePosixPath(self._assets_path).joinpath("qss").as_posix())
+        object.__setattr__(
+            self,
+            "_icon_path",
+            PurePosixPath(self._assets_path).joinpath("icons").as_posix(),
+        )
+        object.__setattr__(
+            self,
+            "_qss_path",
+            PurePosixPath(self._assets_path).joinpath("qss").as_posix(),
+        )
 
     @property
     def icon_path(self) -> str:

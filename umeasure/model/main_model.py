@@ -2,7 +2,7 @@
 ##############################################################################################
 # File Name: main_model.py
 # Description: This is the main model file of the U-Measure project. It is used to create the
-#              collection of all the necessary models needed to run the U-Measure application. 
+#              collection of all the necessary models needed to run the U-Measure application.
 #
 # Attribution:
 # - This file is part of the U-Measure project.
@@ -30,26 +30,33 @@
 
 from dataclasses import dataclass, field
 
-from umeasure.model import SettingsModel, PathModel
+from umeasure.model import SettingsModel, LogsModel, PathModel
 
 
 @dataclass
 class MainModel:
     """This is used as the main application model."""
-    
+
     _settings: SettingsModel = field(init=False, repr=False, compare=False)
+    _logger: LogsModel = field(init=False, repr=False, compare=False)
     _paths: PathModel = field(init=False, repr=False, compare=False)
 
     def __post_init__(self) -> None:
         """This is used after the initialization of the main application model."""
         object.__setattr__(self, "_settings", SettingsModel())
+        object.__setattr__(self, "_logger", LogsModel())
         object.__setattr__(self, "_paths", PathModel())
 
     @property
     def settings(self) -> SettingsModel:
         """Returns the settings model."""
         return self._settings
-    
+
+    @property
+    def logger(self) -> LogsModel:
+        """Returns the logger model."""
+        return self._logger
+
     @property
     def paths(self) -> PathModel:
         """Returns the paths model."""

@@ -299,7 +299,7 @@ class MainController(QObject):
         """Runs the thread methods."""
         while not self._widget.close_triggered:
             self._collection_process()
-        
+
         # Set the threads finished flag to True, so the application can close.
         self._widget.threads_finished = True
 
@@ -324,6 +324,8 @@ class MainController(QObject):
 
     def run(self, version: str) -> None:
         """Runs the main application window."""
+        # Log the application start
+        self._model.logger.operation_log.info(f"U-Measure v{version} started.")
 
         # Display the main application window
         self._widget.display_window(
@@ -332,6 +334,6 @@ class MainController(QObject):
             window_position=self._model.settings.sizing.window_position,
             window_state=self._model.settings.sizing.window_state,
         )
-        
+
         # Set the application exit code
         sys.exit(self._app.exec())

@@ -106,7 +106,9 @@ class SetupWidget(QGroupBox):
         self.setObjectName("group-setup")
 
         # Set the stylesheet from assets/qss/setup_group.qss
-        self.setStyleSheet(open(os.path.join(self._paths.qss_path, "setup_group.qss"), "r").read())
+        self.setStyleSheet(
+            open(os.path.join(self._paths.qss_path, "setup_group.qss"), "r").read()
+        )
 
     def _configure_setup_labels(self) -> None:
         """Configuration of the setup group's labels."""

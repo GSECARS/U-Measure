@@ -74,7 +74,11 @@ class ControlStatusWidget(QGroupBox):
         self.setObjectName("group-control-status")
 
         # Set the stylesheet from assets/qss/control_status_group.qss
-        self.setStyleSheet(open(os.path.join(self._paths.qss_path, "control_status_group.qss"), "r").read())
+        self.setStyleSheet(
+            open(
+                os.path.join(self._paths.qss_path, "control_status_group.qss"), "r"
+            ).read()
+        )
 
     def _configure_control_status_labels(self) -> None:
         """Configuration of the control group's labels."""

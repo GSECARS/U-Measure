@@ -32,9 +32,4 @@ from umeasure.widget.experiment_widget import ExperimentWidget
 from umeasure.widget.control_status_widget import ControlStatusWidget
 from umeasure.widget.main_widget import MainWidget
 
-__all__ = [
-    "SetupWidget",
-    "ExperimentWidget",
-    "ControlStatusWidget",
-    "MainWidget"
-]
+__all__ = ["SetupWidget", "ExperimentWidget", "ControlStatusWidget", "MainWidget"]

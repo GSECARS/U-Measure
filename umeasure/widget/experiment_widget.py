@@ -47,7 +47,6 @@ from umeasure.model import PathModel
 class ExperimentWidget(QGroupBox):
     """Experiment widget groupbox to be used in the MainWidget."""
 
-
     def __init__(self, paths: PathModel) -> None:
         super(ExperimentWidget, self).__init__()
 
@@ -108,7 +107,9 @@ class ExperimentWidget(QGroupBox):
         self.setObjectName("group-experiment")
 
         # Set the stylesheet from assets/qss/experiment_group.qss
-        self.setStyleSheet(open(os.path.join(self._paths.qss_path, "experiment_group.qss"), "r").read())
+        self.setStyleSheet(
+            open(os.path.join(self._paths.qss_path, "experiment_group.qss"), "r").read()
+        )
 
     def _configure_experiment_labels(self) -> None:
         """Configuration of the experiment group's labels."""

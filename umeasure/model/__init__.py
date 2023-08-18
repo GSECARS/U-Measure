@@ -28,6 +28,7 @@
 ##############################################################################################
 
 from umeasure.model.settings.settings_model import SettingsModel
+from umeasure.model.logs_model import LogsModel
 from umeasure.model.qt_worker_model import QtWorkerModel
 from umeasure.model.path_model import PathModel
 from umeasure.model.setup_model import SetupModel
@@ -36,9 +37,10 @@ from umeasure.model.main_model import MainModel
 
 __all__ = [
     "SettingsModel",
+    "LogsModel",
     "QtWorkerModel",
     "PathModel",
     "SetupModel",
     "ExperimentModel",
-    "MainModel"
+    "MainModel",
 ]

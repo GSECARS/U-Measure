@@ -30,7 +30,7 @@
 import os
 from qtpy.QtCore import QObject, Signal, QSize, QPoint, Qt, QEvent
 from qtpy.QtGui import QCloseEvent, QIcon
-from qtpy.QtWidgets import QMainWindow, QFrame, QMessageBox, QGridLayout 
+from qtpy.QtWidgets import QMainWindow, QFrame, QMessageBox, QGridLayout
 from typing import Optional
 
 from umeasure.model import PathModel
@@ -39,6 +39,7 @@ from umeasure.widget import SetupWidget, ExperimentWidget, ControlStatusWidget
 
 class MainWidget(QMainWindow, QObject):
     """This is used as the main application window."""
+
     # Signals
     close_event_changed: Signal = Signal()
 
@@ -74,13 +75,17 @@ class MainWidget(QMainWindow, QObject):
         # Set the Window Title
         self.setWindowTitle(f"U-Measure v{version}")
         # Set the application icon
-        self.setWindowIcon(QIcon(os.path.join(self._paths.icon_path, "ultrasonic_icon.ico")))
+        self.setWindowIcon(
+            QIcon(os.path.join(self._paths.icon_path, "ultrasonic_icon.ico"))
+        )
         # Set the central widget
         self.setCentralWidget(self._main_frame)
         # Set application object name
         self.setObjectName("main-widget")
         # Set the stylesheet from assets/qss/main_widget.qss
-        self.setStyleSheet(open(os.path.join(self._paths.qss_path, "main_widget.qss"), "r").read())
+        self.setStyleSheet(
+            open(os.path.join(self._paths.qss_path, "main_widget.qss"), "r").read()
+        )
 
         # Resize the main application window
         if window_size is not None:
@@ -90,7 +95,7 @@ class MainWidget(QMainWindow, QObject):
         if window_position is not None:
             self.move(window_position)
 
-        # Display the main application window based on the window state 
+        # Display the main application window based on the window state
         if window_state == 1:
             self.showMaximized()
         else:
@@ -112,14 +117,13 @@ class MainWidget(QMainWindow, QObject):
     def closeEvent(self, event: QCloseEvent) -> None:
         """Creates a message box for exit confirmation if closeEvent is triggered."""
         _msg_question = QMessageBox.question(
-            self, 
+            self,
             "Exit confirmation",
             "Are you sure you want to close the application?",
             defaultButton=QMessageBox.No,
         )
 
         if _msg_question == QMessageBox.Yes:
-
             # Emit the application close event changed signal, to update the main window settings.
             self.close_event_changed.emit()
 
@@ -149,12 +153,12 @@ class MainWidget(QMainWindow, QObject):
     def close_triggered(self) -> bool:
         """Returns True if the close event was triggered."""
         return self._close_triggered
-    
+
     @property
     def threads_finished(self) -> bool:
         """Returns True if all threads are finished."""
         return self._threads_finished
-    
+
     @threads_finished.setter
     def threads_finished(self, value: bool) -> None:
         """Sets the threads_finished attribute."""

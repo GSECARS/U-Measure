@@ -1,7 +1,8 @@
 #!usr/bin/python
 ##############################################################################################
-# File Name: settings_model.py
-# Description: This file contains the settings model and the settings model collection.
+# File Name: logs_model.py
+# Description: This file contains the logs model, that is used to create and store the
+#              application logs.
 #
 # Attribution:
 # - This file is part of the U-Measure project.
@@ -28,26 +29,34 @@
 ##############################################################################################
 
 from dataclasses import dataclass, field
-from qtpy.QtCore import QSettings
-
-from umeasure.model.settings import SizingSettingsModel
+from gselogger import LoggerModel
 
 
 @dataclass
-class SettingsModel:
-    """All the settings models are collected here."""
+class LogsModel:
+    """Collection of available log models."""
 
-    _settings: QSettings = field(init=False, repr=False, compare=False)
-    _sizing: SizingSettingsModel = field(init=False, repr=False, compare=False)
+    _app_name: str = field(init=False, repr=False, compare=False)
+    _operation_log: LoggerModel = field(init=False, repr=False, compare=False)
+    _error_log: LoggerModel = field(init=False, repr=False, compare=False)
 
     def __post_init__(self) -> None:
-        """Post-initialization method."""
-        object.__setattr__(self, "_settings", QSettings("GSECARS", "U-Measure"))
+        object.__setattr__(self, "_app_name", "U-Measure")
+        # Operational logs object
         object.__setattr__(
-            self, "_sizing", SizingSettingsModel(settings=self._settings)
+            self,
+            "_operation_log",
+            LoggerModel(app_name=self._app_name, filename="operation"),
+        )
+        # Error logs object
+        object.__setattr__(
+            self, "_error_log", LoggerModel(app_name=self._app_name, filename="error")
         )
 
     @property
-    def sizing(self) -> SizingSettingsModel:
-        """Returns the sizing settings model."""
-        return self._sizing
+    def operation_log(self) -> LoggerModel:
+        return self._operation_log
+
+    @property
+    def error_log(self) -> LoggerModel:
+        return self._error_log
