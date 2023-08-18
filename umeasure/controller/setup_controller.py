@@ -30,7 +30,7 @@
 from qtpy.QtCore import QSettings
 
 from umeasure.model import SetupModel
-from umeasure.widget.groups import SetupWidget
+from umeasure.widget import SetupWidget
 
 
 class SetupController:

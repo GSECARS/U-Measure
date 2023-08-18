@@ -27,4 +27,14 @@
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 ##############################################################################################
 
+from umeasure.widget.setup_widget import SetupWidget
+from umeasure.widget.experiment_widget import ExperimentWidget
+from umeasure.widget.control_status_widget import ControlStatusWidget
 from umeasure.widget.main_widget import MainWidget
+
+__all__ = [
+    "SetupWidget",
+    "ExperimentWidget",
+    "ControlStatusWidget",
+    "MainWidget"
+]

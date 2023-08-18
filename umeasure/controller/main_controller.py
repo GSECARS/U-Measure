@@ -30,7 +30,7 @@
 import datetime
 import sys
 from qtpy.QtWidgets import QApplication, QMessageBox
-from qtpy.QtCore import QSettings, QObject, Signal, QTimer
+from qtpy.QtCore import QSettings, QObject, Signal, QTimer, Qt
 
 from umeasure.model import MainModel, QtWorkerModel
 from umeasure.widget import MainWidget
@@ -50,19 +50,19 @@ class MainController(QObject):
         self._app = QApplication(sys.argv)
         self._model = MainModel()
         self._settings = QSettings("GSECARS", "U-Measure")
-        self._widget = MainWidget(paths=self._model.paths, settings=self._settings)
+        self._widget = MainWidget(paths=self._model.paths)
 
         # Main application thread
         self._main_worker = QtWorkerModel(self._thread_methods, ())
 
         # Setup controller
         self._setup_controller = SetupController(
-            widget=self._widget.group_widget.setup, settings=self._settings
+            widget=self._widget.setup, settings=self._settings
         )
 
         # Experiment controller
         self._experiment_controller = ExperimentController(
-            widget=self._widget.group_widget.experiment, settings=self._settings
+            widget=self._widget.experiment, settings=self._settings
         )
 
         # Visa controller
@@ -71,6 +71,9 @@ class MainController(QObject):
             experiment_model=self._experiment_controller.model,
             basedir=self._setup_controller.basedir,
         )
+
+        # Connect the signal and slot for the main widget settings
+        self._widget.close_event_changed.connect(self._close_event_triggered)
 
         # Helpers
         self._collecting = False
@@ -86,7 +89,20 @@ class MainController(QObject):
         self._configure_main_controller()
         self._configure_widgets()
         self._connect_widgets()
-    
+
+    def _close_event_triggered(self) -> None:
+        """Saves the main application window size, position and state."""
+        # If the window is maximized, save the maximized state, otherwise save the normal state
+        # and the window size and position
+        if self._widget.windowState() == Qt.WindowState.WindowMaximized:
+            self._model.settings.sizing.window_state = 1
+        else:
+            self._model.settings.sizing.window_state = 0
+            # Window size
+            self._model.settings.sizing.window_size = self._widget.size()
+            # Window position
+            self._model.settings.sizing.window_position = self._widget.pos()
+
     def _configure_main_controller(self) -> None:
         """Basic configuration for functionality of the main controller."""
         # Start the main application thread
@@ -95,7 +111,7 @@ class MainController(QObject):
     def _configure_widgets(self) -> None:
         """Sets some configuration values before opening the main application window."""
         # Set initial focus
-        self._widget.group_widget.setup.lbl_path.setFocus()
+        self._widget.setup.lbl_path.setFocus()
 
     def _connect_widgets(self) -> None:
         """Connects signals and slots for some, of the available, widgets."""
@@ -107,7 +123,7 @@ class MainController(QObject):
         )
 
         self._main_timer.timeout.connect(self._timer_ticks)
-        self._widget.group_widget.control_status.btn_collection.clicked.connect(
+        self._widget.control_status.btn_collection.clicked.connect(
             self._btn_collection_clicked
         )
         self.collect_triggered.connect(self._change_to_collecting)
@@ -116,19 +132,19 @@ class MainController(QObject):
 
     def disable_widgets(self) -> None:
         """Disables setup and experiment widgets."""
-        self._widget.group_widget.setup.disable()
-        self._widget.group_widget.experiment.disable()
+        self._widget.setup.disable()
+        self._widget.experiment.disable()
 
     def enable_widgets(self) -> None:
         """Enables setup and experiment widgets."""
-        self._widget.group_widget.setup.enable()
-        self._widget.group_widget.experiment.enable()
+        self._widget.setup.enable()
+        self._widget.experiment.enable()
 
     def _timer_ticks(self) -> None:
         """Timer tick timeout method."""
         elapsed_time = datetime.datetime.now() - self._start_time
         current_delta = datetime.timedelta(seconds=elapsed_time.seconds)
-        self._widget.group_widget.control_status.lbl_time.setText(str(current_delta))
+        self._widget.control_status.lbl_time.setText(str(current_delta))
 
     def _change_to_collecting(self) -> None:
         """Changes the collection status to collecting."""
@@ -136,14 +152,14 @@ class MainController(QObject):
 
         self._append_feedback(message="Starting new collection process.")
 
-        self._widget.group_widget.control_status.lbl_status.setText("Collecting")
-        self._widget.group_widget.control_status.btn_collection.setText("Abort")
+        self._widget.control_status.lbl_status.setText("Collecting")
+        self._widget.control_status.btn_collection.setText("Abort")
 
-        self._widget.group_widget.control_status.lbl_status.setEnabled(False)
-        self._widget.group_widget.control_status.lbl_time.setEnabled(False)
-        self._widget.group_widget.control_status.lbl_repetition_status.setEnabled(False)
+        self._widget.control_status.lbl_status.setEnabled(False)
+        self._widget.control_status.lbl_time.setEnabled(False)
+        self._widget.control_status.lbl_repetition_status.setEnabled(False)
 
-        self._widget.group_widget.control_status.lbl_repetition_status.setVisible(True)
+        self._widget.control_status.lbl_repetition_status.setVisible(True)
 
     def _change_to_idle(self) -> None:
         """Changes the collection status to idle."""
@@ -151,25 +167,25 @@ class MainController(QObject):
         self._aborting = False
         self._collecting = False
 
-        self._widget.group_widget.control_status.lbl_status.setText("Idle")
-        self._widget.group_widget.control_status.btn_collection.setText("Collect")
+        self._widget.control_status.lbl_status.setText("Idle")
+        self._widget.control_status.btn_collection.setText("Collect")
 
-        self._widget.group_widget.control_status.lbl_status.setEnabled(True)
-        self._widget.group_widget.control_status.lbl_time.setEnabled(True)
-        self._widget.group_widget.control_status.lbl_repetition_status.setEnabled(True)
+        self._widget.control_status.lbl_status.setEnabled(True)
+        self._widget.control_status.lbl_time.setEnabled(True)
+        self._widget.control_status.lbl_repetition_status.setEnabled(True)
 
-        self._widget.group_widget.control_status.lbl_repetition_status.setVisible(False)
+        self._widget.control_status.lbl_repetition_status.setVisible(False)
 
         self._main_timer.stop()
 
     def _change_to_aborting(self) -> None:
         """Changes the collection status to aborting."""
-        self._widget.group_widget.control_status.lbl_status.setText("Aborting")
+        self._widget.control_status.lbl_status.setText("Aborting")
         self._aborting = True
 
     def _change_current_repetition(self, repetition: int) -> None:
         """Changes the current status text of the repetitions."""
-        self._widget.group_widget.control_status.lbl_repetition_status.setText(
+        self._widget.control_status.lbl_repetition_status.setText(
             f"{repetition}/{self._experiment_controller.model.repetitions}"
         )
 

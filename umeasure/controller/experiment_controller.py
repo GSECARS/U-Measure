@@ -30,7 +30,7 @@
 from qtpy.QtCore import QSettings
 
 from umeasure.model import ExperimentModel
-from umeasure.widget.groups import ExperimentWidget
+from umeasure.widget import ExperimentWidget
 
 
 class ExperimentController:
