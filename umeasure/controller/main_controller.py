@@ -32,10 +32,9 @@ import sys
 from qtpy.QtWidgets import QApplication, QMessageBox
 from qtpy.QtCore import QSettings, QObject, Signal, QTimer
 
-from umeasure.model import MainModel
+from umeasure.model import MainModel, QtWorkerModel
 from umeasure.widget import MainWidget
 from umeasure.widget.custom import MsgBox
-from umeasure.util import GUIWorker
 from umeasure.controller import SetupController, ExperimentController, VisaController
 
 
@@ -52,6 +51,9 @@ class MainController(QObject):
         self._model = MainModel()
         self._settings = QSettings("GSECARS", "U-Measure")
         self._widget = MainWidget(paths=self._model.paths, settings=self._settings)
+
+        # Main application thread
+        self._main_worker = QtWorkerModel(self._thread_methods, ())
 
         # Setup controller
         self._setup_controller = SetupController(
@@ -76,15 +78,19 @@ class MainController(QObject):
         self._input_check_passed = True
         self._start_time = None
 
-        # Thread and timer
+        # Timer
         self._main_timer = QTimer()
         self._main_timer.setInterval(30)
-        self._main_worker = GUIWorker(self._worker_process, ())
-        self._main_worker.start()
 
         # Run methods
+        self._configure_main_controller()
         self._configure_widgets()
         self._connect_widgets()
+    
+    def _configure_main_controller(self) -> None:
+        """Basic configuration for functionality of the main controller."""
+        # Start the main application thread
+        self._main_worker.start()
 
     def _configure_widgets(self) -> None:
         """Sets some configuration values before opening the main application window."""
@@ -273,15 +279,22 @@ class MainController(QObject):
         self._collecting = True
         self._main_timer.start()
 
-    def _worker_process(self) -> None:
-        """Continuously run a thread to keep GUI from freezing."""
-        while not self._widget.terminated:
-            if self._collecting:
-                self._visa_controller.connect()
-                self._visa_controller.collect_data(abort_status=self._aborting)
-                self.finished.emit()
+    def _thread_methods(self) -> None:
+        """Runs the thread methods."""
+        while not self._widget.close_triggered:
+            self._collection_process()
+        
+        # Set the threads finished flag to True, so the application can close.
+        self._widget.threads_finished = True
 
-            self._visa_controller.restore_defaults()
+    def _collection_process(self) -> None:
+        """Collection process."""
+        if self._collecting:
+            self._visa_controller.connect()
+            self._visa_controller.collect_data(abort_status=self._aborting)
+            self.finished.emit()
+
+        self._visa_controller.restore_defaults()
 
     def _visa_controller_message(self, message: str):
         """Adds some information on the feedback section."""

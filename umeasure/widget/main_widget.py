@@ -52,7 +52,8 @@ class MainWidget(QWidget):
         self.group_widget = MainGroupWidget(paths=self._paths)
 
         # Event helpers
-        self._terminated: bool = False
+        self._close_triggered: bool = False
+        self._threads_finished: bool = False
 
         # Run main application methods
         self._configure_main_widget()
@@ -110,16 +111,32 @@ class MainWidget(QWidget):
         )
 
         if _msg_question == QMessageBox.Yes:
-            self._terminated = True
+
+            # Make sure that all threads and methods are aborted before closing the application.
+            self._close_triggered = True
+            while not self._threads_finished:
+                continue
 
             # Save window size and position.
             self._settings.setValue("window_size", self.size())
             self._settings.setValue("window_position", self.pos())
 
+            # Close the application
             event.accept()
         else:
             event.ignore()
 
     @property
-    def terminated(self):
-        return self._terminated
+    def close_triggered(self) -> bool:
+        """Returns True if the close event was triggered."""
+        return self._close_triggered
+    
+    @property
+    def threads_finished(self) -> bool:
+        """Returns True if all threads are finished."""
+        return self._threads_finished
+    
+    @threads_finished.setter
+    def threads_finished(self, value: bool) -> None:
+        """Sets the threads_finished attribute."""
+        self._threads_finished = value

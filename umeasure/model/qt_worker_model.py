@@ -1,7 +1,7 @@
 #!usr/bin/python
 ##############################################################################################
-# File Name: __init__.py
-# Description: This file is used for the umeasure util package.
+# File Name: qt_worker_model.py
+# Description: This file contains the worker class model that's been used for threading.
 #
 # Attribution:
 # - This file is part of the U-Measure project.
@@ -27,6 +27,18 @@
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 ##############################################################################################
 
-from umeasure.util.gui_worker import GUIWorker
+from qtpy.QtCore import QThread
+from typing import Any, Callable
 
-__all__ = ["GUIWorker"]
+
+class QtWorkerModel(QThread):
+    """Main worker class for threading."""
+
+    def __init__(self, method: Callable, args: Any) -> None:
+        super(QtWorkerModel, self).__init__()
+        self._method = method
+        self._args = args
+
+    def run(self) -> None:
+        """Runs the method."""
+        self._method(*self._args)
