@@ -27,17 +27,15 @@
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 ##############################################################################################
 
-from qtpy.QtCore import QSettings
-
-from umeasure.model import ExperimentModel
+from umeasure.model.settings import ExperimentSettingsModel
 from umeasure.widget import ExperimentWidget
 
 
 class ExperimentController:
     """Provides a way to control and connect the experiment widget with the experiment model."""
 
-    def __init__(self, widget: ExperimentWidget, settings: QSettings) -> None:
-        self.model = ExperimentModel(settings=settings)
+    def __init__(self, widget: ExperimentWidget, model: ExperimentSettingsModel) -> None:
+        self._model = model
         self._widget = widget
 
         self._update_experiment_values()
@@ -63,19 +61,19 @@ class ExperimentController:
 
     def _update_experiment_values(self) -> None:
         """Update the experiment GUI values."""
-        self._widget.spin_repetitions.setValue(self.model.repetitions)
-        self._widget.spin_file_number.setValue(self.model.file_number)
-        self._widget.spin_load.setValue(self.model.load)
-        self._widget.spin_temperature.setValue(self.model.temperature)
-        self._widget.txt_threshold.setText(str(self.model.threshold))
-        self._widget.txt_scan.setText(self.model.scan)
+        self._widget.spin_repetitions.setValue(self._model.repetitions)
+        self._widget.spin_file_number.setValue(self._model.file_number)
+        self._widget.spin_load.setValue(self._model.load)
+        self._widget.spin_temperature.setValue(self._model.temperature)
+        self._widget.txt_threshold.setText(str(self._model.threshold))
+        self._widget.txt_scan.setText(self._model.scan)
 
         # Update frequencies text
         frequencies_str = ""
-        if self.model.frequencies:
-            for index, frequency in enumerate(self.model.frequencies):
+        if self._model.frequencies:
+            for index, frequency in enumerate(self._model.frequencies):
                 frequencies_str += str(frequency)
-                if not index == len(self.model.frequencies) - 1:
+                if not index == len(self._model.frequencies) - 1:
                     frequencies_str += ", "
 
             self._widget.txt_frequencies.setText(frequencies_str)
@@ -92,35 +90,35 @@ class ExperimentController:
                 frequencies_list.append(float(frequency))
 
         # Update current array
-        self.model.frequencies = frequencies_list
+        self._model.frequencies = frequencies_list
 
     def _txt_threshold_text_changed(self) -> None:
         """Updates the current threshold value based on user input."""
-        self.model.threshold = float(self._widget.txt_threshold.text())
+        self._model.threshold = float(self._widget.txt_threshold.text())
 
     def _check_repeated_changed(self, state) -> None:
         """Updates the current repeat value based on user input."""
         if state == 0:
-            self.model.repeat = False
+            self._model.repeat = False
         else:
-            self.model.repeat = True
+            self._model.repeat = True
 
     def _txt_scan_text_changed(self) -> None:
         """Updates the current scan value based on user input."""
-        self.model.scan = self._widget.txt_scan.text()
+        self._model.scan = self._widget.txt_scan.text()
 
     def _spin_repetitions_value_changed(self) -> None:
         """Updates the current repetitions value based on user input."""
-        self.model.repetitions = self._widget.spin_repetitions.value()
+        self._model.repetitions = self._widget.spin_repetitions.value()
 
     def _spin_file_number_value_changed(self) -> None:
         """Updates the current file number value based on user input."""
-        self.model.file_number = self._widget.spin_file_number.value()
+        self._model.file_number = self._widget.spin_file_number.value()
 
     def _spin_load_value_changed(self) -> None:
         """Updates the current load value based on user input."""
-        self.model.load = self._widget.spin_load.value()
+        self._model.load = self._widget.spin_load.value()
 
     def _spin_temperature_value_changed(self) -> None:
         """Updates the current temperature value based on user input."""
-        self.model.temperature = self._widget.spin_temperature.value()
+        self._model.temperature = self._widget.spin_temperature.value()

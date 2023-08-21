@@ -29,8 +29,10 @@
 
 from umeasure.model.settings.sizing_settings_model import SizingSettingsModel
 from umeasure.model.settings.setup_settings_model import SetupSettingsModel
+from umeasure.model.settings.experiment_settings_model import ExperimentSettingsModel
 
 __all__ = [
     "SizingSettingsModel",
     "SetupSettingsModel",
+    "ExperimentSettingsModel",
 ]

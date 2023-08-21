@@ -32,8 +32,7 @@ from pyvisa import ResourceManager, VisaIOError
 from typing import Optional
 from qtpy.QtCore import QObject, Signal
 
-from umeasure.model import ExperimentModel
-from umeasure.model.settings import SetupSettingsModel
+from umeasure.model.settings import SetupSettingsModel, ExperimentSettingsModel
 
 
 class VisaController(QObject):
@@ -45,13 +44,13 @@ class VisaController(QObject):
     def __init__(
         self,
         setup_settings: SetupSettingsModel,
-        experiment_model: ExperimentModel,
+        experiment_settings: ExperimentSettingsModel,
         basedir: str,
     ) -> None:
         super(VisaController, self).__init__()
 
         self._setup = setup_settings
-        self._experiment_model = experiment_model
+        self._experiment = experiment_settings
         self._basedir = basedir
 
         self._resource_manager = ResourceManager()
@@ -101,14 +100,14 @@ class VisaController(QObject):
         self._mso_resource.write(":save:waveform:fileformat auto")
 
         run_number = self._setup.run_number
-        load = self._experiment_model.load
-        temperature = self._experiment_model.temperature
+        load = self._experiment.load
+        temperature = self._experiment.temperature
 
         filename = (
             self._basedir + f"{run_number}_{load}ton_{temperature}K_{frequency}MHz"
         )
-        if self._experiment_model.repetitions > 1:
-            scan = self._experiment_model.scan
+        if self._experiment.repetitions > 1:
+            scan = self._experiment.scan
             filename += f"_{scan}{step}"
 
         filename += ".csv"
@@ -148,10 +147,10 @@ class VisaController(QObject):
         """Runs the data collection loop, accounts for multiple iterations."""
 
         if self.connected:
-            repetitions = self._experiment_model.repetitions
+            repetitions = self._experiment.repetitions
             current_index = 0
 
-            file_number = self._experiment_model.file_number
+            file_number = self._experiment.file_number
 
             while repetitions > 0:
                 if abort_status:
@@ -177,8 +176,8 @@ class VisaController(QObject):
     def _collection_process(self, abort_status: bool, step: Optional[int] = 1) -> None:
         """The collection process for one iteration, multiple frequencies can be used."""
 
-        for index, frequency in enumerate(self._experiment_model.frequencies):
-            if frequency > self._experiment_model.threshold:
+        for index, frequency in enumerate(self._experiment.frequencies):
+            if frequency > self._experiment.threshold:
                 number_of_cycles = 2
             else:
                 number_of_cycles = 1

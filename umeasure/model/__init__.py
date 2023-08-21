@@ -31,7 +31,6 @@ from umeasure.model.settings.settings_model import SettingsModel
 from umeasure.model.logs_model import LogsModel
 from umeasure.model.qt_worker_model import QtWorkerModel
 from umeasure.model.path_model import PathModel
-from umeasure.model.experiment_model import ExperimentModel
 from umeasure.model.main_model import MainModel
 
 __all__ = [
@@ -39,6 +38,5 @@ __all__ = [
     "LogsModel",
     "QtWorkerModel",
     "PathModel",
-    "ExperimentModel",
     "MainModel",
 ]
