@@ -32,7 +32,6 @@ from qtpy.QtWidgets import (
     QGroupBox,
     QGridLayout,
     QHBoxLayout,
-    QVBoxLayout,
     QSizePolicy,
     QLabel,
     QLineEdit,
@@ -40,8 +39,14 @@ from qtpy.QtWidgets import (
     QDoubleSpinBox,
     QAbstractSpinBox,
 )
-from qtpy.QtCore import Qt, QRegularExpression
-from qtpy.QtGui import QRegularExpressionValidator
+from qtpy.QtCore import Qt
+from gsewidgets import (
+    Label,
+    IPv4InputBox,
+    FileNameInputBox,
+    NoWheelNumericSpinBox,
+    FlatButton,
+)
 
 from umeasure.model import PathModel
 
@@ -55,18 +60,25 @@ class SetupWidget(QGroupBox):
         self._paths = paths
 
         # Initialize setup group's widgets
-        self._lbl_mso = QLabel("MSO")
-        self._lbl_afg = QLabel("AFG")
-        self._lbl_cycle = QLabel("Cycle")
-        self._lbl_run_number = QLabel("#Run")
-        self._lbl_vpp = QLabel("Vpp")
-        self.lbl_path = QLabel()
-        self.txt_mso = QLineEdit()
-        self.txt_afg = QLineEdit()
-        self.txt_cycle = QLineEdit()
-        self.txt_run_number = QLineEdit()
-        self.spin_vpp = QDoubleSpinBox()
-        self.btn_reset = QPushButton("Reset")
+        self._lbl_mso = Label("MSO", object_name="lbl-setup")
+        self._lbl_afg = Label("AFG", object_name="lbl-setup")
+        self._lbl_cycle = Label("Cycle", object_name="lbl-setup")
+        self._lbl_run_number = Label("#Run", object_name="lbl-setup")
+        self._lbl_vpp = Label("Vpp", object_name="lbl-setup")
+        self.lbl_path = Label(object_name="lbl-path")
+        self.txt_mso = IPv4InputBox(object_name="txt-setup")
+        self.txt_afg = IPv4InputBox(object_name="txt-setup")
+        self.txt_cycle = FileNameInputBox(object_name="txt-setup")
+        self.txt_run_number = FileNameInputBox(object_name="txt-setup")
+        self.spin_vpp = NoWheelNumericSpinBox(
+            min_value=0.0,
+            max_value=5.0,
+            default_value=2.0,
+            incremental_step=0.1,
+            precision=1,
+            object_name="spin-vpp",
+        )
+        self.btn_reset = FlatButton("Reset", object_name="btn-reset")
 
         # List of setup group's widgets
         self._setup_widgets = [
@@ -85,11 +97,6 @@ class SetupWidget(QGroupBox):
 
         # Run setup group's widget methods
         self._configure_setup_group()
-        self._configure_setup_labels()
-        self._configure_setup_text_boxes()
-        self._configure_setup_spin_boxes()
-        self._configure_setup_buttons()
-        self._connect_setup_widgets()
         self._layout_setup_widgets()
 
     def disable(self) -> None:
@@ -109,72 +116,6 @@ class SetupWidget(QGroupBox):
         self.setStyleSheet(
             open(os.path.join(self._paths.qss_path, "setup_group.qss"), "r").read()
         )
-
-    def _configure_setup_labels(self) -> None:
-        """Configuration of the setup group's labels."""
-        labels = [
-            self._lbl_mso,
-            self._lbl_afg,
-            self._lbl_cycle,
-            self._lbl_run_number,
-            self._lbl_vpp,
-            self.lbl_path,
-        ]
-        [label.setObjectName("lbl-setup") for label in labels]
-        self.lbl_path.setObjectName("lbl-path")
-
-    def _configure_setup_text_boxes(self) -> None:
-        """Configuration of the setup group's text boxes."""
-        txt_boxes = [self.txt_mso, self.txt_afg, self.txt_cycle, self.txt_run_number]
-        [txt_box.setObjectName("txt-setup") for txt_box in txt_boxes]
-
-        # IP validator
-        expression = QRegularExpression("^(?:[0-9]{1,3}\.){3}[0-9]{1,3}$")
-        validator = QRegularExpressionValidator(expression, self)
-        self.txt_mso.setValidator(validator)
-        self.txt_afg.setValidator(validator)
-
-        # Alignment
-        self.txt_mso.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)
-        self.txt_afg.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)
-        self.txt_cycle.setAlignment(Qt.AlignHCenter | Qt.AlignVCenter)
-        self.txt_run_number.setAlignment(Qt.AlignHCenter | Qt.AlignVCenter)
-
-    def _configure_setup_spin_boxes(self) -> None:
-        """Configuration of the setup group's spin boxes."""
-        self.spin_vpp.setObjectName("spin-vpp")
-        self.spin_vpp.setMinimum(0.0)
-        self.spin_vpp.setMaximum(5.0)
-        self.spin_vpp.setSingleStep(0.1)
-        self.spin_vpp.setDecimals(1)
-        self.spin_vpp.setAlignment(Qt.AlignCenter)
-        self.spin_vpp.setButtonSymbols(QAbstractSpinBox.NoButtons)
-
-    def _configure_setup_buttons(self) -> None:
-        """Configuration of the setup group's buttons."""
-        self.btn_reset.setObjectName("btn-reset")
-        self.btn_reset.setFlat(True)
-        self.btn_reset.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
-
-    def _connect_setup_widgets(self) -> None:
-        """Connects signals and slots for some setup widgets."""
-        self.txt_mso.returnPressed.connect(
-            lambda: self._txt_return_pressed(self.txt_mso)
-        )
-        self.txt_afg.returnPressed.connect(
-            lambda: self._txt_return_pressed(self.txt_afg)
-        )
-        self.txt_cycle.returnPressed.connect(
-            lambda: self._txt_return_pressed(self.txt_cycle)
-        )
-        self.txt_run_number.returnPressed.connect(
-            lambda: self._txt_return_pressed(self.txt_run_number)
-        )
-
-    @staticmethod
-    def _txt_return_pressed(txt_widget: QLineEdit) -> None:
-        """Clears focus for selected widgets."""
-        txt_widget.clearFocus()
 
     def _layout_setup_widgets(self) -> None:
         """Sets the layout for the setup group widgets."""

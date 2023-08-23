@@ -36,7 +36,7 @@ class ExperimentSettingsModel:
     """U-Measure experiment settings model."""
 
     settings: QSettings = field(repr=False, compare=False)
-    
+
     _frequencies: list[float] = field(
         init=False, repr=False, compare=False, default_factory=lambda: []
     )
@@ -94,12 +94,12 @@ class ExperimentSettingsModel:
             frequencies_list = [float(frequency) for frequency in saved_list]
 
         return frequencies_list
-   
+
     @property
     def frequencies(self) -> list[float]:
         """Returns the frequencies."""
         return self._frequencies
- 
+
     @frequencies.setter
     def frequencies(self, value) -> None:
         """Sets the frequencies."""
@@ -136,7 +136,6 @@ class ExperimentSettingsModel:
         """Returns the file number."""
         return self._file_number
 
-
     @file_number.setter
     def file_number(self, value) -> None:
         """Sets the file number."""
@@ -172,7 +171,7 @@ class ExperimentSettingsModel:
     def temperature(self) -> float:
         """Returns the temperature."""
         return self._temperature
- 
+
     @temperature.setter
     def temperature(self, value) -> None:
         """Sets the temperature."""

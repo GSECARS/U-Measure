@@ -41,6 +41,7 @@ from umeasure.controller import SetupController, ExperimentController, VisaContr
 class MainController(QObject):
     """Used to connect all controllers, models and widgets."""
 
+    # Signals
     collect_triggered: Signal = Signal()
     abort_triggered: Signal = Signal()
     finished: Signal = Signal()

@@ -30,7 +30,11 @@
 from dataclasses import dataclass, field
 from qtpy.QtCore import QSettings
 
-from umeasure.model.settings import SizingSettingsModel, SetupSettingsModel, ExperimentSettingsModel
+from umeasure.model.settings import (
+    SizingSettingsModel,
+    SetupSettingsModel,
+    ExperimentSettingsModel,
+)
 
 
 @dataclass
@@ -49,7 +53,9 @@ class SettingsModel:
             self, "_sizing", SizingSettingsModel(settings=self._settings)
         )
         object.__setattr__(self, "_setup", SetupSettingsModel(settings=self._settings))
-        object.__setattr__(self, "_experiment", ExperimentSettingsModel(settings=self._settings))
+        object.__setattr__(
+            self, "_experiment", ExperimentSettingsModel(settings=self._settings)
+        )
 
     @property
     def sizing(self) -> SizingSettingsModel:

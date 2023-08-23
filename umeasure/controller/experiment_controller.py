@@ -34,7 +34,9 @@ from umeasure.widget import ExperimentWidget
 class ExperimentController:
     """Provides a way to control and connect the experiment widget with the experiment model."""
 
-    def __init__(self, widget: ExperimentWidget, model: ExperimentSettingsModel) -> None:
+    def __init__(
+        self, widget: ExperimentWidget, model: ExperimentSettingsModel
+    ) -> None:
         self._model = model
         self._widget = widget
 
