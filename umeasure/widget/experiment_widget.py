@@ -28,18 +28,13 @@
 ##############################################################################################
 
 import os
-from qtpy.QtWidgets import (
-    QGroupBox,
-    QGridLayout,
-    QHBoxLayout,
-    QLabel,
-    QLineEdit,
-    QSpinBox,
-    QDoubleSpinBox,
-    QAbstractSpinBox,
+from qtpy.QtWidgets import QGroupBox, QGridLayout, QHBoxLayout
+from gsewidgets import (
+    Label,
+    NoWheelNumericSpinBox,
+    MultiFloatInputBox,
+    FileNameInputBox,
 )
-from qtpy.QtCore import Qt, QRegularExpression
-from qtpy.QtGui import QRegularExpressionValidator
 
 from umeasure.model import PathModel
 
@@ -53,20 +48,55 @@ class ExperimentWidget(QGroupBox):
         self._paths = paths
 
         # Initialize experiment group's widgets
-        self._lbl_frequencies = QLabel("Frequencies")
-        self._lbl_threshold = QLabel("Threshold")
-        self._lbl_repetitions = QLabel("Repetitions")
-        self._lbl_scan = QLabel("Scan")
-        self._lbl_file_number = QLabel("#File")
-        self._lbl_load = QLabel("Load (tons)")
-        self._lbl_temperature = QLabel("Temperature (K)")
-        self.txt_frequencies = QLineEdit()
-        self.txt_threshold = QLineEdit()
-        self.txt_scan = QLineEdit()
-        self.spin_repetitions = QSpinBox()
-        self.spin_file_number = QSpinBox()
-        self.spin_load = QDoubleSpinBox()
-        self.spin_temperature = QDoubleSpinBox()
+        self._lbl_frequencies = Label("Frequencies", object_name="lbl-experiment")
+        self._lbl_threshold = Label("Threshold", object_name="lbl-experiment")
+        self._lbl_repetitions = Label("Repetitions", object_name="lbl-experiment")
+        self._lbl_scan = Label("Scan", object_name="lbl-experiment")
+        self._lbl_file_number = Label("#File", object_name="lbl-experiment")
+        self._lbl_load = Label("Load (tons)", object_name="lbl-experiment")
+        self._lbl_temperature = Label("Temperature (K)", object_name="lbl-experiment")
+        self.txt_frequencies = MultiFloatInputBox(
+            placeholder="e.g. 25, 27.0, 0.2", object_name="txt-experiment"
+        )
+        self.txt_scan = FileNameInputBox(object_name="txt-experiment")
+        self.spin_repetitions = NoWheelNumericSpinBox(
+            min_value=1,
+            max_value=10000,
+            default_value=1,
+            incremental_step=1,
+            object_name="spin-experiment",
+        )
+        self.spin_file_number = NoWheelNumericSpinBox(
+            min_value=1,
+            max_value=100000,
+            default_value=1,
+            incremental_step=10,
+            object_name="spin-experiment",
+        )
+        self.spin_load = NoWheelNumericSpinBox(
+            min_value=0.0,
+            max_value=900.0,
+            default_value=0.0,
+            incremental_step=10.0,
+            precision=1,
+            object_name="spin-experiment",
+        )
+        self.spin_temperature = NoWheelNumericSpinBox(
+            min_value=0.0,
+            max_value=3000.0,
+            default_value=0.0,
+            incremental_step=100.0,
+            precision=1,
+            object_name="spin-experiment",
+        )
+        self.spin_threshold = NoWheelNumericSpinBox(
+            min_value=0.0,
+            max_value=10000000.0,
+            default_value=27.00,
+            incremental_step=1,
+            precision=2,
+            object_name="spin-experiment",
+        )
 
         # List of experiment group's widgets
         self._experiment_widgets = [
@@ -78,19 +108,16 @@ class ExperimentWidget(QGroupBox):
             self._lbl_load,
             self._lbl_temperature,
             self.txt_frequencies,
-            self.txt_threshold,
             self.txt_scan,
             self.spin_repetitions,
             self.spin_file_number,
             self.spin_load,
             self.spin_temperature,
+            self.spin_threshold,
         ]
 
         # Run experiment group's widget methods
         self._configure_experiment_group()
-        self._configure_experiment_labels()
-        self._configure_experiment_text_boxes()
-        self._configure_experiment_spin_boxes()
         self._layout_experiment_widgets()
 
     def disable(self) -> None:
@@ -111,73 +138,6 @@ class ExperimentWidget(QGroupBox):
             open(os.path.join(self._paths.qss_path, "experiment_group.qss"), "r").read()
         )
 
-    def _configure_experiment_labels(self) -> None:
-        """Configuration of the experiment group's labels."""
-        labels = [
-            self._lbl_frequencies,
-            self._lbl_threshold,
-            self._lbl_repetitions,
-            self._lbl_scan,
-            self._lbl_file_number,
-            self._lbl_load,
-            self._lbl_temperature,
-        ]
-        [label.setObjectName("lbl-experiment") for label in labels]
-
-    def _configure_experiment_text_boxes(self) -> None:
-        """Configuration of the experiment group's text boxes."""
-        self.txt_frequencies.setObjectName("txt-experiment")
-        self.txt_threshold.setObjectName("txt-experiment")
-        self.txt_scan.setObjectName("txt-experiment")
-
-        # Validator for frequencies.
-        expression = QRegularExpression("^(((?:0|[1-9][0-9]*)\.[0-9]+)*\, )*$")
-        validator = QRegularExpressionValidator(expression)
-        self.txt_frequencies.setValidator(validator)
-
-        # Validator for threshold frequency
-        single_expression = QRegularExpression("^((?:0|[1-9][0-9]*)\.[0-9]+)$")
-        single_validator = QRegularExpressionValidator(single_expression)
-        self.txt_threshold.setValidator(single_validator)
-
-        self.txt_threshold.setMaximumWidth(52)
-        self.txt_scan.setMinimumWidth(200)
-
-        self.txt_frequencies.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)
-        self.txt_threshold.setAlignment(Qt.AlignHCenter | Qt.AlignVCenter)
-        self.txt_scan.setAlignment(Qt.AlignHCenter | Qt.AlignVCenter)
-
-    def _configure_experiment_spin_boxes(self) -> None:
-        """Configuration of the experiment group's spin boxes."""
-        spin_boxes = [
-            self.spin_repetitions,
-            self.spin_file_number,
-            self.spin_load,
-            self.spin_temperature,
-        ]
-        for spin_box in spin_boxes:
-            spin_box.setObjectName("spin-experiment")
-            spin_box.setAlignment(Qt.AlignCenter)
-            spin_box.setButtonSymbols(QAbstractSpinBox.NoButtons)
-
-        self.spin_repetitions.setMinimum(1)
-        self.spin_repetitions.setMaximum(10000)
-        self.spin_repetitions.setSingleStep(1)
-
-        self.spin_file_number.setMinimum(1)
-        self.spin_file_number.setMaximum(100000)
-        self.spin_file_number.setSingleStep(10)
-
-        self.spin_load.setMinimum(0.0)
-        self.spin_load.setMaximum(900.0)
-        self.spin_load.setSingleStep(10.0)
-        self.spin_load.setDecimals(1)
-
-        self.spin_temperature.setMinimum(0.0)
-        self.spin_temperature.setMaximum(3000.0)
-        self.spin_temperature.setSingleStep(100.0)
-        self.spin_temperature.setDecimals(1)
-
     def _layout_experiment_widgets(self) -> None:
         """Sets the layout for the experiment group widgets."""
         # Main experiment layout
@@ -190,7 +150,7 @@ class ExperimentWidget(QGroupBox):
         frequencies_layout.addWidget(self._lbl_frequencies)
         frequencies_layout.addWidget(self.txt_frequencies)
         frequencies_layout.addWidget(self._lbl_threshold)
-        frequencies_layout.addWidget(self.txt_threshold)
+        frequencies_layout.addWidget(self.spin_threshold)
         experiment_layout.addLayout(frequencies_layout, 0, 0, 1, 6)
 
         # layout for load and temperature

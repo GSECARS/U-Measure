@@ -48,7 +48,9 @@ class ExperimentController:
         self._widget.txt_frequencies.textChanged.connect(
             self._txt_frequencies_text_changed
         )
-        self._widget.txt_threshold.textChanged.connect(self._txt_threshold_text_changed)
+        self._widget.spin_threshold.textChanged.connect(
+            self._spin_threshold_text_changed
+        )
         self._widget.txt_scan.textChanged.connect(self._txt_scan_text_changed)
         self._widget.spin_repetitions.valueChanged.connect(
             self._spin_repetitions_value_changed
@@ -67,7 +69,7 @@ class ExperimentController:
         self._widget.spin_file_number.setValue(self._model.file_number)
         self._widget.spin_load.setValue(self._model.load)
         self._widget.spin_temperature.setValue(self._model.temperature)
-        self._widget.txt_threshold.setText(str(self._model.threshold))
+        self._widget.spin_threshold.setValue(self._model.threshold)
         self._widget.txt_scan.setText(self._model.scan)
 
         # Update frequencies text
@@ -94,9 +96,9 @@ class ExperimentController:
         # Update current array
         self._model.frequencies = frequencies_list
 
-    def _txt_threshold_text_changed(self) -> None:
+    def _spin_threshold_text_changed(self) -> None:
         """Updates the current threshold value based on user input."""
-        self._model.threshold = float(self._widget.txt_threshold.text())
+        self._model.threshold = float(self._widget.spin_threshold.text())
 
     def _check_repeated_changed(self, state) -> None:
         """Updates the current repeat value based on user input."""
