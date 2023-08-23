@@ -71,6 +71,7 @@ class ExperimentController:
         self._widget.spin_temperature.setValue(self._model.temperature)
         self._widget.spin_threshold.setValue(self._model.threshold)
         self._widget.txt_scan.setText(self._model.scan)
+        self._widget.spin_vpp.setValue(self._model.vpp)
 
         # Update frequencies text
         frequencies_str = ""

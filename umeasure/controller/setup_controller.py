@@ -63,7 +63,6 @@ class SetupController:
         self._widget.txt_afg.setText(self._model.afg)
         self._widget.txt_cycle.setText(self._model.cycle)
         self._widget.txt_run_number.setText(self._model.run_number)
-        self._widget.spin_vpp.setValue(self._model.vpp)
 
     def _update_basedir(self) -> None:
         """Updates the current base directory and updates the GUI path label."""

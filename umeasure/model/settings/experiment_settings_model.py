@@ -46,6 +46,7 @@ class ExperimentSettingsModel:
     _scan: str = field(init=False, repr=False, compare=False, default="A")
     _load: float = field(init=False, repr=False, compare=False, default=0.0)
     _temperature: float = field(init=False, repr=False, compare=False, default=0.0)
+    _vpp: float = field(init=False, repr=False, compare=False, default=0.0)
 
     def __post_init__(self) -> None:
         """Post-initialization method."""
@@ -75,6 +76,11 @@ class ExperimentSettingsModel:
         if temperature_value is None:
             temperature_value = 0.0
         object.__setattr__(self, "_temperature", temperature_value)
+        # Set vpp value
+        vpp_value = float(self.settings.value("vpp", type=float))
+        if vpp_value is None:
+            vpp_value = 0.0
+        object.__setattr__(self, "_vpp", vpp_value)
 
     def set_defaults(self) -> None:
         """Sets the default values for the experiment section."""
@@ -85,6 +91,7 @@ class ExperimentSettingsModel:
         object.__setattr__(self, "_scan", "A")
         object.__setattr__(self, "_load", 1)
         object.__setattr__(self, "_temperature", 1)
+        object.__setattr__(self, "vpp", 2.0)
 
     def _convert_array(self) -> list[float]:
         """Converts the saved array to list[float]."""
@@ -178,3 +185,14 @@ class ExperimentSettingsModel:
         if isinstance(value, float):
             object.__setattr__(self, "_temperature", value)
             self.settings.setValue("temperature", self._temperature)
+
+    @property
+    def vpp(self) -> float:
+        """Returns the Vpp."""
+        return self._vpp
+
+    @vpp.setter
+    def vpp(self, value: float) -> None:
+        """Sets the Vpp."""
+        object.__setattr__(self, "_vpp", value)
+        self.settings.setValue("vpp", self._vpp)

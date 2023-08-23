@@ -122,7 +122,7 @@ class VisaController(QObject):
 
     def _send_signal(self, frequency: float, number_of_cycles: int) -> None:
         """Sends the collection commands to the afg instrument."""
-        vpp = self._setup.vpp
+        vpp = self._experiment.vpp
 
         self._afg_resource.write(":output1:state off")
         self._afg_resource.write(":source1:burst:ncycles 1")

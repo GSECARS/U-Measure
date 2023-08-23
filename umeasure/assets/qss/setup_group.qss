@@ -11,7 +11,7 @@
     color: #60b3a1;
 }
 
-#txt-setup, #spin-vpp {
+#txt-setup {
     background-color: #d7dde0;
     color: #494a4d;
     border: 2px solid #d7dde0;
@@ -20,7 +20,7 @@
     padding: 1px 5px;
 }
 
-#txt-setup:focus, #spin-vpp:focus {
+#txt-setup:focus {
     border: 2px solid #60b3a1;
 }
 
@@ -54,7 +54,7 @@
     padding: 10px;
 }
 
-#txt-setup:disabled, #spin-vpp:disabled, #btn-reset:disabled {
+#txt-setup:disabled, #btn-reset:disabled {
     background-color: #cfd0d1;
     border: 2px solid #cfd0d1;
 }

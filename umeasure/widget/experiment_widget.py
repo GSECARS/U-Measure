@@ -55,6 +55,7 @@ class ExperimentWidget(QGroupBox):
         self._lbl_file_number = Label("#File", object_name="lbl-experiment")
         self._lbl_load = Label("Load (tons)", object_name="lbl-experiment")
         self._lbl_temperature = Label("Temperature (K)", object_name="lbl-experiment")
+        self._lbl_vpp = Label("Vpp", object_name="lbl-experiment")
         self.txt_frequencies = MultiFloatInputBox(
             placeholder="e.g. 25, 27.0, 0.2", object_name="txt-experiment"
         )
@@ -97,6 +98,14 @@ class ExperimentWidget(QGroupBox):
             precision=2,
             object_name="spin-experiment",
         )
+        self.spin_vpp = NoWheelNumericSpinBox(
+            min_value=0.0,
+            max_value=5.0,
+            default_value=2.0,
+            incremental_step=0.1,
+            precision=1,
+            object_name="spin-experiment",
+        )
 
         # List of experiment group's widgets
         self._experiment_widgets = [
@@ -107,6 +116,7 @@ class ExperimentWidget(QGroupBox):
             self._lbl_file_number,
             self._lbl_load,
             self._lbl_temperature,
+            self._lbl_vpp,
             self.txt_frequencies,
             self.txt_scan,
             self.spin_repetitions,
@@ -114,6 +124,7 @@ class ExperimentWidget(QGroupBox):
             self.spin_load,
             self.spin_temperature,
             self.spin_threshold,
+            self.spin_vpp,
         ]
 
         # Run experiment group's widget methods
@@ -151,7 +162,7 @@ class ExperimentWidget(QGroupBox):
         frequencies_layout.addWidget(self.txt_frequencies)
         frequencies_layout.addWidget(self._lbl_threshold)
         frequencies_layout.addWidget(self.spin_threshold)
-        experiment_layout.addLayout(frequencies_layout, 0, 0, 1, 6)
+        experiment_layout.addLayout(frequencies_layout, 0, 0, 1, 8)
 
         # layout for load and temperature
         load_temperature_layout = QHBoxLayout()
@@ -162,11 +173,13 @@ class ExperimentWidget(QGroupBox):
         load_temperature_layout.addWidget(self.spin_temperature)
         load_temperature_layout.addWidget(self._lbl_repetitions)
         load_temperature_layout.addWidget(self.spin_repetitions)
+        load_temperature_layout.addWidget(self._lbl_vpp)
+        load_temperature_layout.addWidget(self.spin_vpp)
         load_temperature_layout.addStretch(1)
         load_temperature_layout.addWidget(self._lbl_file_number)
         load_temperature_layout.addWidget(self.spin_file_number)
         load_temperature_layout.addWidget(self._lbl_scan)
         load_temperature_layout.addWidget(self.txt_scan)
-        experiment_layout.addLayout(load_temperature_layout, 1, 0, 1, 6)
+        experiment_layout.addLayout(load_temperature_layout, 1, 0, 1, 8)
 
         self.setLayout(experiment_layout)

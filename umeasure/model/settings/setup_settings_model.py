@@ -41,7 +41,6 @@ class SetupSettingsModel:
     _afg: str = field(init=False, repr=False, compare=False, default="")
     _cycle: str = field(init=False, repr=False, compare=False, default="")
     _run_number: str = field(init=False, repr=False, compare=False, default="")
-    _vpp: float = field(init=False, repr=False, compare=False, default=0.0)
 
     def __post_init__(self) -> None:
         """Post-initialization method."""
@@ -52,19 +51,12 @@ class SetupSettingsModel:
             self, "_run_number", self.settings.value("run_number", type=str)
         )
 
-        # Set vpp value
-        vpp_value = float(self.settings.value("vpp", type=float))
-        if vpp_value is None:
-            vpp_value = 0.0
-        object.__setattr__(self, "_vpp", vpp_value)
-
     def set_defaults(self) -> None:
         """Sets the default values."""
         object.__setattr__(self, "mso", "164.54.160.105")
         object.__setattr__(self, "afg", "164.54.160.117")
         object.__setattr__(self, "cycle", "2022-2")
         object.__setattr__(self, "run_number", "D2711")
-        object.__setattr__(self, "vpp", 2.0)
 
     @property
     def mso(self) -> str:
@@ -109,14 +101,3 @@ class SetupSettingsModel:
         """Sets the run number."""
         object.__setattr__(self, "_run_number", value)
         self.settings.setValue("run_number", self._run_number)
-
-    @property
-    def vpp(self) -> float:
-        """Returns the Vpp."""
-        return self._vpp
-
-    @vpp.setter
-    def vpp(self, value: float) -> None:
-        """Sets the Vpp."""
-        object.__setattr__(self, "_vpp", value)
-        self.settings.setValue("vpp", self._vpp)

@@ -28,18 +28,7 @@
 ##############################################################################################
 
 import os
-from qtpy.QtWidgets import (
-    QGroupBox,
-    QGridLayout,
-    QHBoxLayout,
-    QSizePolicy,
-    QLabel,
-    QLineEdit,
-    QPushButton,
-    QDoubleSpinBox,
-    QAbstractSpinBox,
-)
-from qtpy.QtCore import Qt
+from qtpy.QtWidgets import QGroupBox, QGridLayout, QHBoxLayout
 from gsewidgets import (
     Label,
     IPv4InputBox,
@@ -64,7 +53,6 @@ class SetupWidget(QGroupBox):
         self._lbl_afg = Label("AFG", object_name="lbl-setup")
         self._lbl_cycle = Label("Cycle", object_name="lbl-setup")
         self._lbl_run_number = Label("#Run", object_name="lbl-setup")
-        self._lbl_vpp = Label("Vpp", object_name="lbl-setup")
         self.lbl_path = Label(object_name="lbl-path")
         self.txt_mso = IPv4InputBox(object_name="txt-setup")
         self.txt_afg = IPv4InputBox(object_name="txt-setup")
@@ -86,7 +74,6 @@ class SetupWidget(QGroupBox):
             self._lbl_afg,
             self._lbl_cycle,
             self._lbl_run_number,
-            self._lbl_vpp,
             self.txt_mso,
             self.txt_afg,
             self.txt_cycle,
@@ -146,8 +133,6 @@ class SetupWidget(QGroupBox):
         run_vpp_layout.addWidget(self.txt_cycle)
         run_vpp_layout.addWidget(self._lbl_run_number)
         run_vpp_layout.addWidget(self.txt_run_number)
-        run_vpp_layout.addWidget(self._lbl_vpp)
-        run_vpp_layout.addWidget(self.spin_vpp)
         run_vpp_layout.addStretch(1)
         setup_layout.addLayout(run_vpp_layout, 2, 0, 1, 4)
 
