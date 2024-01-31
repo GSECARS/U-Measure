@@ -158,7 +158,7 @@ class ExperimentWidget(QGroupBox):
             spin_box.setButtonSymbols(QAbstractSpinBox.NoButtons)
 
         self.spin_repetitions.setMinimum(1)
-        self.spin_repetitions.setMaximum(10000)
+        self.spin_repetitions.setMaximum(1000000)
         self.spin_repetitions.setSingleStep(1)
 
         self.spin_cycles.setMinimum(1)
