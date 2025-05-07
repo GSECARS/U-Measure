@@ -171,7 +171,7 @@ class ExperimentWidget(QGroupBox):
 
         self.spin_vpp.setObjectName("spin-vpp")
         self.spin_vpp.setMinimum(0.0)
-        self.spin_vpp.setMaximum(5.0)
+        self.spin_vpp.setMaximum(10.0)
         self.spin_vpp.setSingleStep(0.1)
         self.spin_vpp.setDecimals(1)
         self.spin_vpp.setAlignment(Qt.AlignCenter)
